@@ -20,7 +20,7 @@ import {
 import { FlickeringGrid } from '@/components/background/grid-background/grid-background';
 import { Waves } from '@/components/background/wave-background/wave-background';
 import { selectTheme, setTheme } from '@/store/theme/theme-slice';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Plus } from 'lucide-react';
 
 export default function CarouselDemo() {
   const router = useRouter();
@@ -198,7 +198,12 @@ export default function CarouselDemo() {
       <div className="absolute z-20 flex items-center bottom-12 justify-center h-fit w-fit select-none left-[50%] translate-x-[-50%]">
         <FloatingDock mobileClassName="translate-y-20" items={links} />
       </div>
-      <div></div>
+      <div className="absolute left-2 h-10 w-10 z-[9999] text-neutral-600 dark:text-neutral-200 bottom-12 rounded-[2.5rem] hover:w-48 bg-neutral-200 dark:bg-neutral-800 transition-all duration-300 overflow-hidden">
+        <button className="h-10 w-10 rounded-[9999px]  flex justify-center items-center">
+          <Plus />
+          <div className="absolute w-40 left-7">Add Component</div>
+        </button>
+      </div>
       {getBackgroundEffect()}
     </div>
   );
