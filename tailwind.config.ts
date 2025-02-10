@@ -56,6 +56,17 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      animation: {
+        shake: 'shake 3s ease-out infinite',
+      },
+      keyframes: {
+        shake: {
+          '1%': { transform: 'translate(8px,2px)' },
+          '2%': { transform: 'translate(0px,0px)' },
+          '3%': { transform: 'translate(-8px,2px)' },
+          '4%': { transform: 'translate(0px,0px)' },
+        },
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],

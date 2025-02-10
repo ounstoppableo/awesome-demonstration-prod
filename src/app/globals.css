@@ -6,6 +6,21 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+@font-face {
+  font-family: 'iconfont';
+  src:
+    url('/iconfont/iconfont.woff2') format('woff2'),
+    url('/iconfont/iconfont.woff') format('woff'),
+    url('/iconfont/iconfont.ttf') format('truetype');
+}
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -93,6 +108,7 @@ body {
     width: var(--scrollBarWidth) !important;
     border-radius: 9999px;
   }
+  cursor: pointer;
 }
 
 .scrollbar.horizontal {
@@ -102,6 +118,7 @@ body {
     height: var(--scrollBarWidth) !important;
     border-radius: 9999px;
   }
+  cursor: pointer;
 }
 
 .decorationsOverviewRuler {
