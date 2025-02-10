@@ -15,7 +15,6 @@ import useSetMonacoThemes from './hooks/useSetMonacoThemes';
 
 export default function Editor() {
   const [currentTab, setCurrentTab] = useState('tab-1');
-  const monaco = useMonaco();
   const demoValue = `
 import * as React from 'react';
 import { StandardProps } from '..';
@@ -44,15 +43,8 @@ declare const ListItemText: React.ComponentType<ListItemTextProps>;
 export default ListItemText;
 `;
   const language = 'typescript';
-  function handleEditorWillMount(monaco: any) {
-    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
-      target: monaco.languages.typescript.ScriptTarget.Latest,
-      module: monaco.languages.typescript.ModuleKind.ES2015,
-      allowNonTsExtensions: true,
-      lib: ['es2018'],
-    });
-  }
-  useSetMonacoThemes();
+
+  const { handleEditorWillMount, handleEditorDidMount } = useSetMonacoThemes();
   return (
     <Tabs defaultValue={currentTab} className="flex flex-col h-full">
       <TabsList className="relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border justify-start pl-0.5 pt-0.5">
@@ -91,6 +83,7 @@ export default ListItemText;
           defaultValue={demoValue}
           className="h-full"
           beforeMount={handleEditorWillMount}
+          onMount={handleEditorDidMount}
           theme="customTheme"
         />
       </TabsContent>
@@ -101,6 +94,7 @@ export default ListItemText;
           defaultValue={demoValue}
           className="h-full"
           beforeMount={handleEditorWillMount}
+          onMount={handleEditorDidMount}
           theme="customTheme"
         />
       </TabsContent>
@@ -111,6 +105,7 @@ export default ListItemText;
           defaultValue={demoValue}
           className="h-full"
           beforeMount={handleEditorWillMount}
+          onMount={handleEditorDidMount}
           theme="customTheme"
         />
       </TabsContent>

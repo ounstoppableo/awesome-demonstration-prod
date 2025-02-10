@@ -42,7 +42,7 @@ export default function EditorContainer() {
           <div className="hover:rotate-[360deg] transition-all duration-200 ">
             <div className="bg-[url(https://www.unstoppable840.cn/assets/avatar.jpeg)] bg-blend-lighten bg-[#0ff] bg-center bg-contain w-10 h-10 rounded-[100%] relative after:absolute after:w-10 after:h-10 after:bg-[url(https://www.unstoppable840.cn/assets/avatar.jpeg)] after:bg-blend-lighten after:bg-[#f00] after:bg-center after:bg-contain after:rounded-[100%] after:mix-blend-darken after:animate-shake"></div>
           </div>
-          <div className="font-semibold absolute left-10 w-24 flex justify-center items-center">
+          <div className="font-semibold absolute left-10 w-24 flex justify-center items-center select-none">
             Click Me!
           </div>
         </div>

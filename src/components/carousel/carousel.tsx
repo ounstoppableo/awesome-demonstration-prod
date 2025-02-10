@@ -69,7 +69,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     <div className="[perspective:1200px] [transform-style:preserve-3d] select-none">
       <li
         ref={slideRef}
-        className="flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[70vmin] h-[70vmin] mx-[4vmin] z-10 "
+        className="group flex flex-1 flex-col items-center justify-center relative text-center text-white opacity-100 transition-all duration-300 ease-in-out w-[70vmin] h-[70vmin] mx-[4vmin] z-10"
         onClick={() => handleSlideClick(index)}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
@@ -103,14 +103,16 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             decoding="sync"
           />
           {current === index && (
-            <div className="absolute inset-0 bg-black/30 transition-all duration-1000" />
+            <div className="absolute inset-0 group-hover:bg-black/20 transition-all duration-1000" />
           )}
         </div>
 
         <article
-          className={`relative p-[4vmin] transition-opacity duration-1000 ease-in-out ${
-            current === index ? 'opacity-100 visible' : 'opacity-0 invisible'
-          }`}
+          className={`${
+            current === index
+              ? 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'
+              : 'opacity-0 invisible'
+          } relative p-[4vmin] transition-opacity duration-1000 ease-in-out `}
         >
           <h2 className="text-lg md:text-2xl lg:text-4xl font-semibold  relative">
             {title}
@@ -118,7 +120,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
           <div className="flex justify-center">
             <button
               onClick={handleClick}
-              className="mt-6  px-4 py-2 w-fit mx-auto sm:text-sm text-black bg-white h-12 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
+              className="mt-6 px-4 py-2 w-fit mx-auto sm:text-sm text-black bg-white h-12 border border-transparent text-xs flex justify-center items-center rounded-2xl hover:shadow-lg transition duration-200 shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)]"
             >
               {button}
             </button>

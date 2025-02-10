@@ -58,6 +58,7 @@ export default {
       },
       animation: {
         shake: 'shake 3s ease-out infinite',
+        'wave-pulse': 'wave-pulse 4s ease-in-out infinite',
       },
       keyframes: {
         shake: {
@@ -65,6 +66,10 @@ export default {
           '2%': { transform: 'translate(0px,0px)' },
           '3%': { transform: 'translate(-8px,2px)' },
           '4%': { transform: 'translate(0px,0px)' },
+        },
+        'wave-pulse': {
+          '0%, 100%': { opacity: '0.4' },
+          '50%': { opacity: '0.7' },
         },
       },
     },

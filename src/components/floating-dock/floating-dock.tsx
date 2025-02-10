@@ -118,11 +118,13 @@ function IconContainer({
   title,
   icon,
   href,
+  handleClick,
 }: {
   mouseX: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
+  handleClick?: (e?: any) => any;
 }) {
   let ref = useRef<HTMLDivElement>(null);
 
@@ -174,6 +176,7 @@ function IconContainer({
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         className="aspect-square rounded-full bg-gray-200 dark:bg-neutral-800 flex items-center justify-center relative"
+        onClick={handleClick}
       >
         <AnimatePresence>
           {hovered && (
