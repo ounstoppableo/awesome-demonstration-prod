@@ -192,7 +192,7 @@ export default function CarouselDemo() {
 
   return (
     <div className="h-[100vh]">
-      <div className="absolute overflow-hidden w-full h-full pt-20">
+      <div className="absolute overflow-hidden w-full h-full pt-24">
         <Carousel slides={slideData} />
       </div>
       <div className="absolute z-20 flex items-center bottom-12 justify-center h-fit w-fit select-none left-[50%] translate-x-[-50%]">

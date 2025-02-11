@@ -59,17 +59,29 @@ export default {
       animation: {
         shake: 'shake 3s ease-out infinite',
         'wave-pulse': 'wave-pulse 4s ease-in-out infinite',
+        rotate: 'rotate 3s linear infinite',
+        gradientMove: 'gradient-move 5s infinite linear',
       },
       keyframes: {
         shake: {
-          '1%': { transform: 'translate(8px,2px)' },
-          '2%': { transform: 'translate(0px,0px)' },
-          '3%': { transform: 'translate(-8px,2px)' },
-          '4%': { transform: 'translate(0px,0px)' },
+          '1%': { transform: 'translate(12px,4px)' },
+          '2%': { transform: 'translate(0px,-4px)' },
+          '3%': { transform: 'translate(-12px,4px)' },
+          '4%': { transform: 'translate(0px,-4px)' },
+          '5%': { transform: 'translate(0px,0px)' },
         },
         'wave-pulse': {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '0.7' },
+        },
+        rotate: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        'gradient-move': {
+          '0%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
+          '100%': { 'background-position': '0 50%' },
         },
       },
     },

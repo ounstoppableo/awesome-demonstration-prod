@@ -125,3 +125,10 @@ body {
   width: var(--scrollBarWidth) !important;
   border-radius: 9999px;
 }
+
+.gradiant-text {
+  background: linear-gradient(90deg, #12c2e9, #c471ed, #91eae4);
+  background-size: 400%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
