@@ -1,8 +1,10 @@
 import { useMonaco } from '@monaco-editor/react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import monacoThemes from '@/monaco-themes/Night Owl.json';
 
-export default function useSetMonacoThemes() {
+export default function useCustomMonaco() {
+  const [monacoInstance, setMonacoIntance] = useState<any>(null);
+  const [editorContent, setEditorContent] = useState('');
   function handleEditorWillMount(monaco: any) {
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.Latest,
@@ -14,6 +16,16 @@ export default function useSetMonacoThemes() {
   function handleEditorDidMount(editor: any, monaco: any) {
     monaco.editor.defineTheme('customTheme', monacoThemes as any);
     monaco.editor.setTheme('customTheme');
+    setMonacoIntance(editor);
   }
-  return { handleEditorWillMount, handleEditorDidMount };
+  function handleModelContentChange(event: any) {
+    setEditorContent(monacoInstance?.getValue());
+  }
+  return {
+    handleEditorWillMount,
+    handleEditorDidMount,
+    handleModelContentChange,
+    editorContent,
+    monacoInstance,
+  };
 }

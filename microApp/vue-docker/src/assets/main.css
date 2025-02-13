@@ -1,0 +1,16 @@
+@import './base.css';
+
+:root {
+  --scrollBarWidth: 6px;
+}
+
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+  width: var(--scrollBarWidth); /* 控制滚动条的宽度 */
+  height: var(--scrollBarWidth); /* 控制横向滚动条的高度 */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3); /* 设置拇指的颜色 */
+  border-radius: 9999px; /* 设置拇指的圆角 */
+}

@@ -1,0 +1,37 @@
+{
+  "name": "vue-docker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node ./preheat.cjs && vite --port 11451",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.26.8",
+    "@babel/traverse": "^7.26.8",
+    "@vue/compiler-sfc": "^3.5.13",
+    "acorn": "^8.14.0",
+    "dayjs": "^1.11.13",
+    "es-module-lexer": "^1.6.0",
+    "eslint": "^9",
+    "pinia": "^3.0.1",
+    "vue": "^3.5.13",
+    "vue3-sfc-loader": "^0.9.5"
+  },
+  "devDependencies": {
+    "@tsconfig/node22": "^22.0.0",
+    "@types/node": "^22.13.1",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "@vue/tsconfig": "^0.7.0",
+    "npm-run-all2": "^7.0.2",
+    "typescript": "~5.7.3",
+    "vite": "^6.0.11",
+    "vite-plugin-vue-devtools": "^7.7.1",
+    "vue-tsc": "^2.2.0"
+  }
+}

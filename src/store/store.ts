@@ -1,6 +1,7 @@
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import backgroundEffectsReducer from './background-effects/background-effects-slice';
 import themeReducer from './theme/theme-slice';
+import componentInfoReducer from './component-info/component-info-slice';
 
 // ...
 export const makeStore = () => {
@@ -8,6 +9,7 @@ export const makeStore = () => {
     reducer: {
       backgroundEffects: backgroundEffectsReducer,
       theme: themeReducer,
+      componentInfo: componentInfoReducer,
     },
   });
 };

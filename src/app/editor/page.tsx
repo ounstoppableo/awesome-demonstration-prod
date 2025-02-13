@@ -17,16 +17,39 @@ import {
 } from '@/components/selector/selector';
 import { Button } from '@/components/buttons/button-two/index';
 import { House, Boxes } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BubbleText from '@/components/bubble-text';
+import { getComponentInfo, getFileContent } from '../lib/data';
+import { useDispatch } from 'react-redux';
+import { setComponentInfo } from '@/store/component-info/component-info-slice';
 
 export default function EditorContainer() {
   const [selectedValue, setSelectedValue] = useState('html');
   const router = useRouter();
+  const dispatch = useDispatch();
   const handleValueChange = (value: string) => {
     setSelectedValue(value);
   };
+  useEffect(() => {
+    getComponentInfo({ id: 'test' }).then(async (res) => {
+      if (res.code === 200) {
+        const fileContentRes = await getFileContent({
+          id: res.data.id,
+          fileName: res.data.entryFile,
+        });
+        if (fileContentRes.code === 200) {
+          dispatch(
+            setComponentInfo({
+              ...res.data,
+              currentFile: res.data.entryFile,
+              fileContentsMap: { [res.data.entryFile]: fileContentRes.data },
+            }),
+          );
+        }
+      }
+    });
+  }, []);
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">
       <div className="py-2 px-0.5 flex justify-between border items-center relative">
@@ -83,7 +106,7 @@ export default function EditorContainer() {
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
         <ResizablePanel>
-          <Viewer></Viewer>
+          <Viewer framwork={selectedValue}></Viewer>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>
