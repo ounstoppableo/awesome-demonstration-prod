@@ -1,3 +1,4 @@
+'use client';
 import {
   Tabs,
   TabsContent,
@@ -22,7 +23,7 @@ import useCustomMonaco from './hooks/useCustomMonaco';
 
 export default function Editor() {
   const componentInfo = useAppSelector(selectComponentInfo);
-  const language = 'typescript';
+  const language = 'react';
   const dispatch = useDispatch();
 
   const {
@@ -31,7 +32,7 @@ export default function Editor() {
     handleModelContentChange,
     editorContent,
     monacoInstance,
-  } = useCustomMonaco();
+  } = useCustomMonaco({ language });
 
   useEffect(() => {
     dispatch(
@@ -99,8 +100,6 @@ export default function Editor() {
           >
             {componentInfo.fileContentsMap[item] ? (
               <MonacoEditor
-                defaultLanguage={language}
-                path={language}
                 defaultValue={componentInfo.fileContentsMap[item]}
                 className="h-full"
                 loading={<div></div>}
