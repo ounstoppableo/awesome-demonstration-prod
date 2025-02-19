@@ -56,11 +56,7 @@ let fetchInterceptor: any;
 const request = (...params: any) => {
   if (!fetchInterceptor) {
     if (typeof window === 'undefined') return;
-    fetchInterceptor = new FetchInterceptor(location.origin, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    fetchInterceptor = new FetchInterceptor(location.origin, {});
   }
   return fetchInterceptor.request.apply(fetchInterceptor, params);
 };

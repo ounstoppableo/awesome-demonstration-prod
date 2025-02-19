@@ -96,6 +96,16 @@ body {
   height: var(--scrollBarWidth); /* 控制横向滚动条的高度 */
 }
 
+.noScrollBar ::-webkit-scrollbar {
+  width: 0px; /* 控制滚动条的宽度 */
+  height: 0px; /* 控制横向滚动条的高度 */
+}
+
+.noScrollBar {
+  -ms-overflow-style: none; /* IE 和 Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.3); /* 设置拇指的颜色 */
   border-radius: 9999px; /* 设置拇指的圆角 */

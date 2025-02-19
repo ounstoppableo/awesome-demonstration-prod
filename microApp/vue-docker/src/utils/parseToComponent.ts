@@ -18,7 +18,7 @@ export async function parseToComponent(
     moduleCache: { vue: Vue },
     async getFile(url?: any) {
       // 正则表达式来提取所有 import 语句
-      const importRegex = /import\s+[^'"]+['"][^'"]+['"];?/g;
+      const importRegex = /import\s+[^'"]*['"][^'"]+['"];?/g;
       const allImports = sfcString.match(importRegex) || [];
 
       // 过滤出不是从 'vue' 导入的 import 语句

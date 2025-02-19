@@ -15,3 +15,10 @@ export const getFileContent = async (params: FileContentParams) => {
     `/api/fileContent?scope=${params.id}&fileName=${params.fileName}`,
   );
 };
+
+type PackageParseParams = {
+  filePath: string;
+};
+export const packageParse = async (params: PackageParseParams) => {
+  return await request(`/api/packageParse?filePath=${params.filePath}`);
+};

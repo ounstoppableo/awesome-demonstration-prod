@@ -661,7 +661,7 @@ export default function MainPage() {
                             <div className="font-bold py-2">
                               Relevant File Fields
                             </div>
-                            <div className="flex flex-col gap-4 w-full overflow-y-auto pb-4 max-h-44 noScrollBar">
+                            <div className="flex flex-col gap-4 w-full overflow-y-auto max-h-44 noScrollBar">
                               {(
                                 form.getValues(
                                   `files.${framework}.relevantFiles` as any,
