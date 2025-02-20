@@ -22,7 +22,9 @@ class FetchInterceptor {
         finalOptions.headers['Authorization'] = `Bearer ${token}`;
       }
     }
-
+    if (!(finalOptions.body instanceof FormData)) {
+      finalOptions.body = JSON.stringify(finalOptions.body);
+    }
     try {
       const response = await fetch(this.baseURL + url, finalOptions);
       return this.responseHandler(response);

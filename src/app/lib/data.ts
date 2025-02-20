@@ -22,3 +22,11 @@ type PackageParseParams = {
 export const packageParse = async (params: PackageParseParams) => {
   return await request(`/api/packageParse?filePath=${params.filePath}`);
 };
+
+type AddComponentInfo = {};
+export const addComponentInfo = async (params: AddComponentInfo) => {
+  return await request(`/api/componentInfo`, {
+    method: 'POST',
+    body: params,
+  });
+};

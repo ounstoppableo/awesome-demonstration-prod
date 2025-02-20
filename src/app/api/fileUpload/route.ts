@@ -1,6 +1,8 @@
+import handleResponse from '@/utils/handleResponse';
 import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { v4 as uuidv4 } from 'uuid';
 
 export const config = {
   api: {
@@ -8,9 +10,9 @@ export const config = {
   },
 };
 
-export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData();
+export async function POST(req: NextRequest) {
+  return await handleResponse(req, async (req) => {
+    const formData = await req.formData();
     const file = formData.get('file') as File | null;
 
     if (!file) {
@@ -18,7 +20,8 @@ export async function POST(request: NextRequest) {
     }
 
     const buffer = Buffer.from(await file.arrayBuffer());
-    const fileName = file.name.replace(/\s/g, '-');
+    const extname = path.extname(file.name);
+    const fileName = uuidv4() + extname;
     const filePath = path.join(process.cwd(), 'public', 'temp', fileName);
 
     await writeFile(filePath, buffer);
@@ -27,12 +30,5 @@ export async function POST(request: NextRequest) {
       data: { filePath: path.join('public', 'temp', fileName), fileName },
       code: 200,
     });
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({
-      msg: 'File uploaded successfully',
-      data: { filePath: '', fileName: '' },
-      code: 200,
-    });
-  }
+  });
 }
