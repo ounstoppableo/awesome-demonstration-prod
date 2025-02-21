@@ -1,4 +1,5 @@
 'use client';
+import useBackground from '@/hooks/useBackground';
 import { IconArrowNarrowRight } from '@tabler/icons-react';
 import { useState, useRef, useId, useEffect } from 'react';
 
@@ -63,6 +64,8 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     event.currentTarget.style.opacity = '1';
   };
 
+  const { getBackgroundEffect } = useBackground();
+
   const { slot, button, title, handleClick } = slide;
 
   return (
@@ -83,7 +86,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
         }}
       >
         <div
-          className="absolute top-0 left-0 w-full h-full bg-[#1D1F2F] rounded-[5%] overflow-hidden transition-all duration-150 ease-out"
+          className="absolute top-0 left-0 w-full h-full gradient-border rounded-[5%] overflow-hidden transition-all duration-150 ease-out"
           style={{
             transform:
               current === index
@@ -91,11 +94,12 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : 'none',
           }}
         >
+          {getBackgroundEffect()}
           <div
             style={{
               opacity: current === index ? 1 : 0.5,
             }}
-            className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-600 ease-in-out "
+            className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-600 ease-in-out"
           >
             {slot}
           </div>

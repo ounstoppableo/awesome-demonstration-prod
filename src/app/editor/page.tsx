@@ -74,12 +74,12 @@ export default function EditorContainer() {
         >
           Home
         </Button>
-        <div className="group h-10 flex items-center overflow-hidden w-10 hover:w-36 relative box-content cursor-pointer border transition-all duration-200 rounded-[9999px] origin-right after:bg-gradient-to-r after:from-[0%] after:from-[transparent] after:via-[70%] after:via-[#83a4d4] after:to-[#b6fbff] after:to-[100%] after:absolute after:inset-0 after:left-[50%] after:origin-left after:-z-10 after:animate-rotate">
-          <div className="flex items-center h-10 reactive w-36 group-hover:p-1 after:absolute after:rounded-[2.5rem] after:h-9 after:inset-x-0.5 after:bg-background">
-            <div className="hover:rotate-[360deg] transition-all duration-200 rounded-[9999px] reactive z-10 w-10 h-10 group-hover:w-9 group-hover:h-9">
+        <div className="h-10 flex items-center justify-center overflow-hidden p-1 w-10 hover:w-36 relative box-border cursor-pointer transition-all duration-200 rounded-[9999px] gradient-border">
+          <div className="flex items-center h-10 reactive w-36">
+            <div className="hover:rotate-[360deg] transition-all duration-200 reactive z-10 w-8 h-8">
               <div className="transition-all duration-200 bg-[url(https://www.unstoppable840.cn/assets/avatar.jpeg)] bg-blend-lighten bg-[#0ff] bg-center bg-contain w-full h-full rounded-[100%] relative after:absolute after:w-full after:h-full after:bg-[url(https://www.unstoppable840.cn/assets/avatar.jpeg)] after:bg-blend-lighten after:bg-[#f00] after:bg-center after:bg-contain after:rounded-[100%] after:mix-blend-darken after:animate-shake"></div>
             </div>
-            <div className="font-semibold absolute left-10 w-24 flex justify-center items-center select-none z-10 gradiant-text animate-gradientMove">
+            <div className="font-semibold absolute left-10 w-20 flex justify-center items-center select-none z-10 gradiant-text animate-gradientMove">
               To Blog!
             </div>
           </div>

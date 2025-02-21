@@ -17,10 +17,8 @@ import {
   selectBackgroundEffects,
   setBackgroundEffect,
 } from '@/store/background-effects/background-effects-slice';
-import { FlickeringGrid } from '@/components/background/grid-background/grid-background';
-import { Waves } from '@/components/background/wave-background/wave-background';
 import { selectTheme, setTheme } from '@/store/theme/theme-slice';
-import { Sun, Moon, Plus, Pencil, Component, Files } from 'lucide-react';
+import { Sun, Moon, Plus } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -35,6 +33,7 @@ import useAddComponentForm from './hooks/useAddComponentForm';
 import { getComponentList, getFileContent } from './lib/data';
 import Viewer from '@/components/viewer/viewer';
 import formatDataToViewerAdaptor from '@/utils/formatDataToViewer';
+import useBackground from '@/hooks/useBackground';
 
 export default function MainPage() {
   const router = useRouter();
@@ -172,43 +171,7 @@ export default function MainPage() {
     });
   }, []);
 
-  const getBackgroundEffect = () => {
-    switch (currentBackgroundEffect) {
-      case 'particles':
-        return <div id="particles-js" className="absolute inset-0 -z-10"></div>;
-      case 'grid':
-        return (
-          <FlickeringGrid
-            className="-z-10 absolute inset-0 size-full"
-            squareSize={8}
-            gridGap={8}
-            color="#6B7280"
-            maxOpacity={0.5}
-            flickerChance={1}
-          />
-        );
-      case 'wave':
-        return (
-          <Waves
-            lineColor={
-              theme === 'dark'
-                ? 'rgba(255, 255, 255, 0.3)'
-                : 'rgba(0, 0, 0, 0.3)'
-            }
-            backgroundColor="transparent"
-            waveSpeedX={0.02}
-            waveSpeedY={0.01}
-            waveAmpX={40}
-            waveAmpY={20}
-            friction={0.9}
-            tension={0.01}
-            maxCursorMove={120}
-            xGap={12}
-            yGap={36}
-          />
-        );
-    }
-  };
+  const { getBackgroundEffect } = useBackground();
 
   const { formStep, AddComponentForm, handleSubmitBtnClick } =
     useAddComponentForm();

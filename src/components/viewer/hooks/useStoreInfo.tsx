@@ -37,7 +37,7 @@ export default function useStoreInfo(props: any) {
           type: 'setStyle',
           style: {
             body: {
-              background: theme === 'dark' ? '#1a1a1a' : '#fff',
+              background: theme === 'dark' ? 'transparent' : 'transparent',
             },
           },
         },
@@ -56,7 +56,7 @@ export default function useStoreInfo(props: any) {
         type: 'setStyle',
         style: {
           body: {
-            background: theme === 'dark' ? '#1a1a1a' : '#fff',
+            background: theme === 'dark' ? 'transparent' : 'transparent',
           },
         },
       },
