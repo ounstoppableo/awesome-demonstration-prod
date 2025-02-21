@@ -2,14 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState, AppThunk } from '../store';
 import { removeParticle, setParticle } from '@/utils/particleControl';
 import { cloneDeep, merge } from 'lodash';
-
-type ComponentInfo = {
-  id: string;
-  entryFile: string;
-  relaventPackages: string[];
-  currentFile: string;
-  fileContentsMap: { [key: string]: string };
-};
+import { ComponentInfoForViewerType as ComponentInfo } from '@/utils/addComponentFormDataFormat';
 
 export interface ComponentInfoState {
   value: ComponentInfo;
@@ -19,9 +12,12 @@ const initialState: ComponentInfoState = {
   value: {
     id: '',
     entryFile: '',
-    relaventPackages: [],
+    relevantPackages: [],
+    externalFiles: [],
     currentFile: '',
     fileContentsMap: {},
+    framework: [],
+    currentFramework: '',
   },
 };
 

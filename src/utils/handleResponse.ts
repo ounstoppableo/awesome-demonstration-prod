@@ -27,18 +27,23 @@ const handleResponse = async (
 };
 export default handleResponse;
 
-export const ResponseMsg: any = {
+type ResponseMsgType = {
+  serverError: string;
+  paramsError: string;
+  fileError: string;
+};
+
+export const ResponseMsg: ResponseMsgType = {
   serverError: '服务器错误!',
   paramsError: '参数不完整或格式错误！',
   fileError: '文件不存在!',
 };
 
-const getResponseMsgKeyByValue = (value: any): any => {
+const getResponseMsgKeyByValue = (value: string): any => {
   return Object.keys(ResponseMsg).find(
-    (key: any) => ResponseMsg[key] === value,
+    (key: any) => ResponseMsg[key as keyof ResponseMsgType] === value,
   );
 };
-
 export type ResponseBody = {
   msg: string;
   data?: any;

@@ -3,10 +3,10 @@ import request from '@/utils/fetch';
 export const getComponentInfo = async (id: string) => {
   return await request(`/api/componentInfo?id=${id}`);
 };
-export const getRelaventPackages = async (id: string) => {
+export const getRelevantPackages = async (id: string) => {
   const res = await request(`/api/componentInfo?id=${id}`);
   if (res.code === 200) {
-    return res.relaventPackages;
+    return res.relevantPackages;
   } else {
     return [];
   }

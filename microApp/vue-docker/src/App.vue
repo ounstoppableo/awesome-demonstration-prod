@@ -24,6 +24,14 @@ onMounted(() => {
         console.log(111);
       }
     }
+    if (e.data.type === 'setStyle') {
+      Object.keys(e.data.style).map((selector) => {
+        Object.keys(e.data.style[selector]).forEach((attr) => {
+          (document.querySelector(selector) as any).style[attr] =
+            e.data.style[selector][attr];
+        });
+      });
+    }
   });
   window.parent.postMessage(
     { type: 'frameworkReady', data: '我准备好了~' },
@@ -34,7 +42,14 @@ onMounted(() => {
 
 <template>
   <Suspense>
-    <div>
+    <div
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      "
+    >
       <component :is="componentName" :key="randomKey"></component>
     </div>
   </Suspense>

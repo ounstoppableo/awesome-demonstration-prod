@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 type ViewInfo = {
   id: string;
   entryFile: string;
-  relaventPackages: string[];
+  relevantPackages: string[];
   currentFile: string;
   fileContentsMap: { [key: string]: string };
 };
@@ -14,7 +14,7 @@ export const useViewInfoStoreStore = defineStore('viewInfoStore', {
   state: (): ViewInfo => ({
     id: '',
     entryFile: '',
-    relaventPackages: [],
+    relevantPackages: [],
     currentFile: '',
     fileContentsMap: {},
   }),
@@ -26,8 +26,8 @@ export const useViewInfoStoreStore = defineStore('viewInfoStore', {
         return '';
       }
     },
-    getRelaventPackages(): string[] {
-      return this.relaventPackages;
+    getRelevantPackages(): string[] {
+      return this.relevantPackages;
     },
   },
   actions: {

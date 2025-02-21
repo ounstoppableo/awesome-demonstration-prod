@@ -32,43 +32,13 @@ import {
 } from '@/components/dialog/index';
 import { Button } from '@/components/buttons/button-three';
 import useAddComponentForm from './hooks/useAddComponentForm';
+import { getComponentList, getFileContent } from './lib/data';
+import Viewer from '@/components/viewer/viewer';
+import formatDataToViewerAdaptor from '@/utils/formatDataToViewer';
 
 export default function MainPage() {
   const router = useRouter();
-  const slideData = [
-    {
-      title: 'Mystic Mountains',
-      button: 'Explore Component',
-      handleClick: (e: any) => {
-        router.push('/editor');
-      },
-      src: 'https://images.unsplash.com/photo-1494806812796-244fe51b774d?q=80&w=3534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-    {
-      title: 'Urban Dreams',
-      button: 'Explore Component',
-      handleClick: (e: any) => {
-        router.push('/editor');
-      },
-      src: 'https://images.unsplash.com/photo-1518710843675-2540dd79065c?q=80&w=3387&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-    {
-      title: 'Neon Nights',
-      button: 'Explore Component',
-      handleClick: (e: any) => {
-        router.push('/editor');
-      },
-      src: 'https://images.unsplash.com/photo-1590041794748-2d8eb73a571c?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-    {
-      title: 'Desert Whispers',
-      button: 'Explore Component',
-      handleClick: (e: any) => {
-        router.push('/editor');
-      },
-      src: 'https://images.unsplash.com/photo-1679420437432-80cfbf88986c?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-    },
-  ];
+  const [slideData, setSlideData] = useState([]);
   const theme = useAppSelector(selectTheme);
   const links = [
     {
@@ -162,6 +132,45 @@ export default function MainPage() {
       backgroundEffectMap[currentBackgroundEffect].removeBackground();
     };
   }, [theme]);
+
+  useEffect(() => {
+    getComponentList().then(async (res) => {
+      if (res.code === 200) {
+        const slideData: any = await Promise.all(
+          res.data.map(async (item: any) => {
+            const componentInfoForViewer = formatDataToViewerAdaptor(item);
+            const res = await getFileContent({
+              id: componentInfoForViewer.id,
+              fileName: componentInfoForViewer.entryFile,
+            });
+            if (res.code === 200) {
+              componentInfoForViewer.fileContentsMap[
+                componentInfoForViewer.entryFile
+              ] = res.data.fileContent;
+            } else {
+              componentInfoForViewer.fileContentsMap[
+                componentInfoForViewer.entryFile
+              ] = '';
+            }
+
+            return {
+              title: item.name,
+              button: 'Explore Component',
+              handleClick: (e: any) => {
+                router.push(`/editor?id=${item.id}`);
+              },
+              slot: (
+                <Viewer
+                  componentInfoForParent={componentInfoForViewer}
+                ></Viewer>
+              ),
+            };
+          }),
+        );
+        setSlideData(slideData);
+      }
+    });
+  }, []);
 
   const getBackgroundEffect = () => {
     switch (currentBackgroundEffect) {

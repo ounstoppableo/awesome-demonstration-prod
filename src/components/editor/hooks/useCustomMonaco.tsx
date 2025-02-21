@@ -2,12 +2,14 @@
 import { useMonaco } from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
 import monacoThemes from '@/monaco-themes/Night Owl.json';
+import { useAppSelector } from '@/store/hooks';
+import { selectComponentInfo } from '@/store/component-info/component-info-slice';
 
-export default function useCustomMonaco(props: any) {
-  const { language } = props;
+export default function useCustomMonaco(props?: any) {
   const [monacoInstance, setMonacoIntance] = useState<any>(null);
   const [editorContent, setEditorContent] = useState('');
-  const worker = useRef<any>(null);
+  const componentInfo = useAppSelector(selectComponentInfo);
+  const worker = useRef<any>({ postMessage: () => {}, terminal: () => {} });
   function handleEditorWillMount(monaco: any) {
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
       target: monaco.languages.typescript.ScriptTarget.Latest,
@@ -30,10 +32,10 @@ export default function useCustomMonaco(props: any) {
     monaco.editor.defineTheme('customTheme', monacoThemes as any);
     monaco.editor.setTheme('customTheme');
     let model;
-    if (language === 'vue') {
+    if (componentInfo.currentFramework === 'vue') {
       model = monaco.editor.createModel('', 'html');
     }
-    if (language === 'react') {
+    if (componentInfo.currentFramework === 'react') {
       model = monaco.editor.createModel(
         '',
         'typescript',

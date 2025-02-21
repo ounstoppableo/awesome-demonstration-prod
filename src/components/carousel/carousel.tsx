@@ -5,7 +5,7 @@ import { useState, useRef, useId, useEffect } from 'react';
 interface SlideData {
   title: string;
   button: string;
-  src: string;
+  slot: string;
   handleClick: (event: React.MouseEvent<HTMLButtonElement>) => any;
 }
 
@@ -63,7 +63,7 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
     event.currentTarget.style.opacity = '1';
   };
 
-  const { src, button, title, handleClick } = slide;
+  const { slot, button, title, handleClick } = slide;
 
   return (
     <div className="[perspective:1200px] [transform-style:preserve-3d] select-none">
@@ -91,17 +91,14 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
                 : 'none',
           }}
         >
-          <img
-            className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+          <div
             style={{
               opacity: current === index ? 1 : 0.5,
             }}
-            alt={title}
-            src={src}
-            onLoad={imageLoaded}
-            loading="eager"
-            decoding="sync"
-          />
+            className="absolute inset-0 w-full h-full object-cover opacity-100 transition-opacity duration-600 ease-in-out "
+          >
+            {slot}
+          </div>
           {current === index && (
             <div className="absolute inset-0 group-hover:bg-black/20 transition-all duration-1000" />
           )}
@@ -144,7 +141,7 @@ const CarouselControl = ({
 }: CarouselControlProps) => {
   return (
     <button
-      className={`relative z-[9999] w-10 h-10 flex items-center mx-2 justify-center bg-neutral-200 dark:bg-neutral-800 border-3 border-transparent rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
+      className={`relative z-30 w-10 h-10 flex items-center mx-2 justify-center bg-neutral-200 dark:bg-neutral-800 border-3 border-transparent rounded-full focus:border-[#6D64F7] focus:outline-none hover:-translate-y-0.5 active:translate-y-0.5 transition duration-200 ${
         type === 'previous' ? 'rotate-180' : ''
       }`}
       title={title}

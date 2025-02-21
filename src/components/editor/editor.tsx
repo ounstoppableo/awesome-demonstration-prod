@@ -5,12 +5,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/components/tabs/tabs';
-import {
-  Editor as MonacoEditor,
-  DiffEditor,
-  useMonaco,
-  loader,
-} from '@monaco-editor/react';
+import { Editor as MonacoEditor } from '@monaco-editor/react';
 import { useEffect, useState } from 'react';
 import { getFileContent } from '@/app/lib/data';
 import { useDispatch } from 'react-redux';
@@ -23,7 +18,6 @@ import useCustomMonaco from './hooks/useCustomMonaco';
 
 export default function Editor() {
   const componentInfo = useAppSelector(selectComponentInfo);
-  const language = 'react';
   const dispatch = useDispatch();
 
   const {
@@ -32,7 +26,7 @@ export default function Editor() {
     handleModelContentChange,
     editorContent,
     monacoInstance,
-  } = useCustomMonaco({ language });
+  } = useCustomMonaco();
 
   useEffect(() => {
     dispatch(
@@ -78,7 +72,7 @@ export default function Editor() {
       className="flex flex-col h-full"
     >
       <TabsList className="relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border justify-start pl-0.5 pt-0.5">
-        {componentInfo.relaventPackages.map((item: string, index) => {
+        {componentInfo.relevantPackages.map((item: string, index) => {
           return (
             <TabsTrigger
               value={item}
@@ -91,7 +85,7 @@ export default function Editor() {
           );
         })}
       </TabsList>
-      {componentInfo.relaventPackages.map((item, index) => {
+      {componentInfo.relevantPackages.map((item, index) => {
         return (
           <TabsContent
             key={item + index}

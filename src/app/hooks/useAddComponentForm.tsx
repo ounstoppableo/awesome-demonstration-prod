@@ -44,6 +44,10 @@ import { useForm } from 'react-hook-form';
 
 import { addComponentInfo, packageParse } from '../lib/data';
 import { Component, Pencil, Plus } from 'lucide-react';
+import {
+  ComponentInfoFormType,
+  formSchema,
+} from '@/utils/addComponentFormDataFormat';
 
 export default function useAddComponentForm(props?: any) {
   const onBeforeUpload = (files: File[]) => {
@@ -54,62 +58,8 @@ export default function useAddComponentForm(props?: any) {
     }
     return true;
   };
-  const formSchema = z.object({
-    componentName: z.string().nonempty({ message: '' }),
-    framework: z.array(z.string()).nonempty({ message: '' }),
-    editComponentId: z.string().nonempty({ message: '' }),
-    addOrEdit: z.string(),
-    files: z
-      .object({
-        html: z
-          .object({
-            entryFile: z.object({
-              fileName: z.string().nonempty({ message: '' }),
-              filePath: z.string().nonempty({ message: '' }),
-            }),
-            relevantFiles: z.array(
-              z.object({
-                fileName: z.string().nonempty({ message: '' }),
-                filePath: z.string().nonempty({ message: '' }),
-                external: z.boolean(),
-              }),
-            ),
-          })
-          .nullable(),
-        vue: z
-          .object({
-            entryFile: z.object({
-              fileName: z.string().nonempty({ message: '' }),
-              filePath: z.string().nonempty({ message: '' }),
-            }),
-            relevantFiles: z.array(
-              z.object({
-                fileName: z.string().nonempty({ message: '' }),
-                filePath: z.string().nonempty({ message: '' }),
-                external: z.boolean(),
-              }),
-            ),
-          })
-          .nullable(),
-        react: z
-          .object({
-            entryFile: z.object({
-              fileName: z.string().nonempty({ message: '' }),
-              filePath: z.string().nonempty({ message: '' }),
-            }),
-            relevantFiles: z.array(
-              z.object({
-                fileName: z.string().nonempty({ message: '' }),
-                filePath: z.string().nonempty({ message: '' }),
-                external: z.boolean(),
-              }),
-            ),
-          })
-          .nullable(),
-      })
-      .nullable(),
-  });
-  const form = useForm<z.infer<typeof formSchema>>({
+
+  const form = useForm<ComponentInfoFormType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       editComponentId: 'default',

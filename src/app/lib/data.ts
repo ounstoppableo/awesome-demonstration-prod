@@ -30,3 +30,8 @@ export const addComponentInfo = async (params: AddComponentInfo) => {
     body: params,
   });
 };
+
+type GetComponentList = {};
+export const getComponentList = async (params?: GetComponentList) => {
+  return await request(`/api/componentList`);
+};

@@ -58,12 +58,6 @@
   font-weight: normal;
 }
 
-.dark {
-  body {
-    background: #1a1a1a;
-  }
-}
-
 body {
   min-height: 100vh;
   color: var(--color-text);

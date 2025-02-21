@@ -22,31 +22,43 @@ import { useRouter } from 'next/navigation';
 import BubbleText from '@/components/bubble-text';
 import { getComponentInfo, getFileContent } from '../lib/data';
 import { useDispatch } from 'react-redux';
-import { setComponentInfo } from '@/store/component-info/component-info-slice';
+import {
+  selectComponentInfo,
+  setComponentInfo,
+} from '@/store/component-info/component-info-slice';
+import { useSearchParams } from 'next/navigation';
+import formatDataToViewerAdaptor from '@/utils/formatDataToViewer';
+import { useAppSelector } from '@/store/hooks';
 
 export default function EditorContainer() {
-  const [selectedValue, setSelectedValue] = useState('html');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const componentInfo = useAppSelector(selectComponentInfo);
+
   const dispatch = useDispatch();
   const handleValueChange = (value: string) => {
-    setSelectedValue(value);
+    dispatch(setComponentInfo({ currentFramework: value }));
   };
   useEffect(() => {
-    getComponentInfo({ id: 'test' }).then(async (res) => {
+    const id = searchParams.get('id');
+    if (!id) return;
+    getComponentInfo({ id }).then(async (res) => {
       if (res.code === 200) {
+        const componentInfoForViewer = formatDataToViewerAdaptor(res.data);
         const fileContentRes = await getFileContent({
-          id: res.data.id,
-          fileName: res.data.entryFile,
+          id: componentInfoForViewer.id,
+          fileName: componentInfoForViewer.entryFile,
         });
         if (fileContentRes.code === 200) {
-          dispatch(
-            setComponentInfo({
-              ...res.data,
-              currentFile: res.data.entryFile,
-              fileContentsMap: { [res.data.entryFile]: fileContentRes.data },
-            }),
-          );
+          componentInfoForViewer.fileContentsMap[
+            componentInfoForViewer.entryFile
+          ] = fileContentRes.data.fileContent;
+        } else {
+          componentInfoForViewer.fileContentsMap[
+            componentInfoForViewer.entryFile
+          ] = '';
         }
+        dispatch(setComponentInfo(componentInfoForViewer));
       }
     });
   }, []);
@@ -72,30 +84,39 @@ export default function EditorContainer() {
             </div>
           </div>
         </div>
-        <Select defaultValue={selectedValue} onValueChange={handleValueChange}>
+        <Select
+          value={componentInfo.currentFramework}
+          onValueChange={handleValueChange}
+        >
           <SelectTrigger className="[&>span]:flex [&>span]:items-center [&>span]:gap-2 [&>span_svg]:shrink-0 [&>span_svg]:text-muted-foreground/80 w-[180px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="[&_*[role=option]>span>svg]:shrink-0 [&_*[role=option]>span>svg]:text-muted-foreground/80 [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
             <SelectGroup>
-              <SelectItem value="html">
-                <svg className="icon" aria-hidden="true">
-                  <use xlinkHref="#icon-HTML"></use>
-                </svg>
-                <span className="truncate">HTML</span>
-              </SelectItem>
-              <SelectItem value="vue">
-                <svg className="icon" aria-hidden="true">
-                  <use xlinkHref="#icon-Vue"></use>
-                </svg>
-                <span className="truncate">Vue</span>
-              </SelectItem>
-              <SelectItem value="react">
-                <svg className="icon" aria-hidden="true">
-                  <use xlinkHref="#icon-react"></use>
-                </svg>
-                <span className="truncate">React</span>
-              </SelectItem>
+              {componentInfo.framework.map((framework) => {
+                return (
+                  <SelectItem value={framework} key={framework}>
+                    <svg className="icon" aria-hidden="true">
+                      <use
+                        xlinkHref={`#icon-${
+                          framework === 'html'
+                            ? 'HTML'
+                            : framework === 'vue'
+                              ? 'Vue'
+                              : 'react'
+                        }`}
+                      ></use>
+                    </svg>
+                    <span className="truncate">
+                      {framework === 'html'
+                        ? 'HTML'
+                        : framework === 'vue'
+                          ? 'Vue'
+                          : 'React'}
+                    </span>
+                  </SelectItem>
+                );
+              })}
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -106,7 +127,7 @@ export default function EditorContainer() {
         </ResizablePanel>
         <ResizableHandle withHandle={true} />
         <ResizablePanel>
-          <Viewer framwork={selectedValue}></Viewer>
+          <Viewer></Viewer>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

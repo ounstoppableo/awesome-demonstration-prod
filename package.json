@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev --port 7777 --turbopack\"  \"lerna run dev\" --paralle",
+    "dev": "concurrently \"next dev --port 7777\"  \"lerna run dev\" --paralle",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
