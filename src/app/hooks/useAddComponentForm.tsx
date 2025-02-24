@@ -37,17 +37,23 @@ import {
 import { cloneDeep, merge } from 'lodash';
 import { Switch } from '@/components/switch';
 import { Input as FileUpload } from '@/components/file-upload/base';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { addComponentInfo, packageParse } from '../lib/data';
+import {
+  addComponentInfo,
+  getComponentInfo,
+  getComponentList,
+  packageParse,
+} from '../lib/data';
 import { Component, Pencil, Plus } from 'lucide-react';
 import {
   ComponentInfoFormType,
   formSchema,
 } from '@/utils/addComponentFormDataFormat';
+import { formatDataToForm } from '@/utils/dataFormat';
 
 export default function useAddComponentForm(props?: any) {
   const onBeforeUpload = (files: File[]) => {
@@ -92,6 +98,7 @@ export default function useAddComponentForm(props?: any) {
   const handleSubmitBtnClick = () => {
     switch (activeStep) {
       case 1:
+        handleGetComponentInfo();
         handleStepChange(2);
         break;
       case 2:
@@ -101,6 +108,22 @@ export default function useAddComponentForm(props?: any) {
         handleFormSubmit(onSubmit);
         break;
     }
+  };
+  const handleGetComponentInfo = () => {
+    if (form.getValues('addOrEdit') === 'add') return;
+    getComponentInfo({ id: form.getValues('editComponentId') as string }).then(
+      (res) => {
+        if (res.code === 200) {
+          const componentInfoForForm = formatDataToForm(res.data);
+          Object.keys(componentInfoForForm).forEach((key) => {
+            form.setValue(
+              key as any,
+              (componentInfoForForm as any)[key as any],
+            );
+          });
+        }
+      },
+    );
   };
   const handleStepChange = (e: number) => {
     handleFormSubmit(
@@ -141,6 +164,18 @@ export default function useAddComponentForm(props?: any) {
     { value: 'vue', label: 'Vue', category: 'Framework' },
     { value: 'react', label: 'React', category: 'Framework' },
   ];
+  const addOrEdit = form.watch('addOrEdit');
+  const [componentList, setComponentList] = useState([]);
+  useEffect(() => {
+    if (addOrEdit === 'edit') {
+      getComponentList().then((res) => {
+        if (res.code === 200) {
+          setComponentList(res.data);
+        }
+      });
+    }
+  }, [addOrEdit]);
+
   const formItems = () => {
     switch (activeStep) {
       case 1:
@@ -204,10 +239,19 @@ export default function useAddComponentForm(props?: any) {
                         </SelectTrigger>
                         <SelectContent className="[&_*[role=option]>span>svg]:shrink-0 [&_*[role=option]>span>svg]:text-muted-foreground/80 [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2 [&_*[role=option]]:pe-8 [&_*[role=option]]:ps-2">
                           <SelectGroup>
-                            <SelectItem value="test">
-                              <Component />
-                              <span className="truncate">Test Component</span>
-                            </SelectItem>
+                            {componentList.map((component: any) => {
+                              return (
+                                <SelectItem
+                                  value={component.id}
+                                  key={component.id}
+                                >
+                                  <Component />
+                                  <span className="truncate">
+                                    {component.name}
+                                  </span>
+                                </SelectItem>
+                              );
+                            })}
                           </SelectGroup>
                         </SelectContent>
                       </Select>

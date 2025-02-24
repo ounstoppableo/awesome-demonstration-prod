@@ -89,6 +89,15 @@ body {
 
 :root {
   --scrollBarWidth: 6px;
+  --flowing-light: linear-gradient(
+    60deg,
+    hsl(353, 100%, 72%),
+    hsl(279, 81%, 75%),
+    hsl(266, 80%, 69%),
+    hsl(181, 100%, 44%),
+    hsl(345, 87%, 88%),
+    hsl(18, 96%, 80%)
+  );
 }
 
 /* 自定义滚动条样式 */
@@ -138,8 +147,9 @@ body {
 }
 
 .gradiant-text {
-  background: linear-gradient(90deg, #12c2e9, #c471ed, #91eae4);
-  background-size: 400%;
+  background: var(--flowing-light);
+  background-size: 300% 300%;
+  background-position: 0 50%;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -156,17 +166,7 @@ body {
   z-index: -1;
   width: calc(100% + var(--border-width) * 2);
   height: calc(100% + var(--border-width) * 2);
-  background: linear-gradient(
-    60deg,
-    hsl(224, 85%, 66%),
-    hsl(269, 85%, 66%),
-    hsl(314, 85%, 66%),
-    hsl(359, 85%, 66%),
-    hsl(44, 85%, 66%),
-    hsl(89, 85%, 66%),
-    hsl(134, 85%, 66%),
-    hsl(179, 85%, 66%)
-  );
+  background: var(--flowing-light);
   background-size: 300% 300%;
   background-position: 0 50%;
   border-radius: 10px;

@@ -32,7 +32,7 @@ import { Button } from '@/components/buttons/button-three';
 import useAddComponentForm from './hooks/useAddComponentForm';
 import { getComponentList, getFileContent } from './lib/data';
 import Viewer from '@/components/viewer/viewer';
-import formatDataToViewerAdaptor from '@/utils/formatDataToViewer';
+import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import useBackground from '@/hooks/useBackground';
 
 export default function MainPage() {

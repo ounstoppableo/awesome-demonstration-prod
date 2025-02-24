@@ -2,14 +2,15 @@
 import { useMonaco } from '@monaco-editor/react';
 import { useEffect, useRef, useState } from 'react';
 import monacoThemesDark from '@/monaco-themes/Night Owl.json';
-import monacoThemesLight from '@/monaco-themes/Night Owl Light.json';
 import { useAppSelector } from '@/store/hooks';
 import { selectComponentInfo } from '@/store/component-info/component-info-slice';
+import { selectTheme } from '@/store/theme/theme-slice';
 
 export default function useCustomMonaco(props?: any) {
   const [monacoInstance, setMonacoIntance] = useState<any>(null);
   const [editorContent, setEditorContent] = useState('');
   const componentInfo = useAppSelector(selectComponentInfo);
+  const theme = useAppSelector(selectTheme);
   const worker = useRef<any>({ postMessage: () => {}, terminal: () => {} });
   function handleEditorWillMount(monaco: any) {
     monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
@@ -31,8 +32,12 @@ export default function useCustomMonaco(props?: any) {
   }
   function handleEditorDidMount(editor: any, monaco: any) {
     monaco.editor.defineTheme('customThemeDark', monacoThemesDark as any);
-    monaco.editor.defineTheme('customThemeLight', monacoThemesLight as any);
-    monaco.editor.setTheme('customThemeDark');
+    if (theme === 'dark') {
+      monaco.editor.setTheme('customThemeDark');
+    } else {
+      monaco.editor.setTheme('vs');
+    }
+
     let model;
     if (componentInfo.currentFramework === 'vue') {
       model = monaco.editor.createModel('', 'html');

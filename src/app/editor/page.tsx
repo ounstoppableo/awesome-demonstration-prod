@@ -27,7 +27,7 @@ import {
   setComponentInfo,
 } from '@/store/component-info/component-info-slice';
 import { useSearchParams } from 'next/navigation';
-import formatDataToViewerAdaptor from '@/utils/formatDataToViewer';
+import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import { useAppSelector } from '@/store/hooks';
 
 export default function EditorContainer() {
