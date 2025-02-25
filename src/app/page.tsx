@@ -137,7 +137,10 @@ export default function MainPage() {
       if (res.code === 200) {
         const slideData: any = await Promise.all(
           res.data.map(async (item: any) => {
-            const componentInfoForViewer = formatDataToViewerAdaptor(item);
+            const componentInfoForViewer = formatDataToViewerAdaptor(
+              item,
+              item.framework[0],
+            );
             const res = await getFileContent({
               id: componentInfoForViewer.id,
               fileName: componentInfoForViewer.entryFile,
@@ -186,7 +189,7 @@ export default function MainPage() {
       </div>
       <Dialog>
         <DialogTrigger>
-          <div className="absolute left-2 h-10 w-10 z-[9999] text-neutral-600 dark:text-neutral-200 bottom-12 rounded-[2.5rem] hover:w-48 bg-neutral-200 dark:bg-neutral-800 transition-all duration-300 overflow-hidden">
+          <div className="absolute left-2 h-10 w-10 z-40 text-neutral-600 dark:text-neutral-200 bottom-12 rounded-[2.5rem] hover:w-48 bg-neutral-200 dark:bg-neutral-800 transition-all duration-300 overflow-hidden">
             <div className="h-10 w-10 rounded-[9999px]  flex justify-center items-center">
               <Plus />
               <div className="absolute w-40 left-7">Add Component</div>

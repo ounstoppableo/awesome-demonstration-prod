@@ -39,7 +39,10 @@ export default function useCustomMonaco(props?: any) {
     }
 
     let model;
-    if (componentInfo.currentFramework === 'vue') {
+    if (
+      componentInfo.currentFramework === 'vue' ||
+      componentInfo.currentFramework === 'html'
+    ) {
       model = monaco.editor.createModel('', 'html');
     }
     if (componentInfo.currentFramework === 'react') {

@@ -77,7 +77,7 @@ export type ComponentInfoForViewerType = {
   id: string;
   entryFile: string;
   relevantPackages: string[];
-  externalFiles: any[];
+  externalFiles: { fileName: string; filePath: string }[];
   currentFile: string;
   fileContentsMap: { [key: string]: string };
   framework: string[];

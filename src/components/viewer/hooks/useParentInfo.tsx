@@ -3,7 +3,7 @@ import { selectTheme } from '@/store/theme/theme-slice';
 import { useEffect, useState } from 'react';
 
 export default function useParentInfo(props: any) {
-  const { iframeRef, componentInfoForParent } = props;
+  const { iframeRef, componentInfoForParent, getServerAddr } = props;
   const [frameworkReady, setFrameworkReady] = useState(false);
   const theme = useAppSelector(selectTheme);
 
@@ -28,7 +28,7 @@ export default function useParentInfo(props: any) {
       };
       iframeRef.current?.contentWindow.postMessage(
         messageData,
-        location.protocol + '//' + location.hostname + ':11451',
+        getServerAddr(componentInfoForParent.currentFramework),
       );
       iframeRef.current?.contentWindow.postMessage(
         {
@@ -39,7 +39,7 @@ export default function useParentInfo(props: any) {
             },
           },
         },
-        location.protocol + '//' + location.hostname + ':11451',
+        getServerAddr(componentInfoForParent.currentFramework),
       );
     }
   }, [frameworkReady]);
@@ -54,7 +54,7 @@ export default function useParentInfo(props: any) {
           },
         },
       },
-      location.protocol + '//' + location.hostname + ':11451',
+      getServerAddr(componentInfoForParent.currentFramework),
     );
   }, [theme]);
 

@@ -23,6 +23,7 @@ import BubbleText from '@/components/bubble-text';
 import { getComponentInfo, getFileContent } from '../lib/data';
 import { useDispatch } from 'react-redux';
 import {
+  clearComponentInfo,
   selectComponentInfo,
   setComponentInfo,
 } from '@/store/component-info/component-info-slice';
@@ -37,14 +38,18 @@ export default function EditorContainer() {
 
   const dispatch = useDispatch();
   const handleValueChange = (value: string) => {
-    dispatch(setComponentInfo({ currentFramework: value }));
+    handleGetComponentInfo(value);
   };
-  useEffect(() => {
+
+  const handleGetComponentInfo = (framwork?: string) => {
     const id = searchParams.get('id');
     if (!id) return;
     getComponentInfo({ id }).then(async (res) => {
       if (res.code === 200) {
-        const componentInfoForViewer = formatDataToViewerAdaptor(res.data);
+        const componentInfoForViewer = formatDataToViewerAdaptor(
+          res.data,
+          framwork ? framwork : res.data.framework[0],
+        );
         const fileContentRes = await getFileContent({
           id: componentInfoForViewer.id,
           fileName: componentInfoForViewer.entryFile,
@@ -58,9 +63,13 @@ export default function EditorContainer() {
             componentInfoForViewer.entryFile
           ] = '';
         }
+        dispatch(clearComponentInfo(null));
         dispatch(setComponentInfo(componentInfoForViewer));
       }
     });
+  };
+  useEffect(() => {
+    handleGetComponentInfo();
   }, []);
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">

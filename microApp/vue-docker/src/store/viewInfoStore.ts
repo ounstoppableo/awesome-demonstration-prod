@@ -38,7 +38,8 @@ export const useViewInfoStoreStore = defineStore('viewInfoStore', {
       if (this.fileContentsMap[fileName]) {
         return this.fileContentsMap[fileName];
       } else {
-        const fileContent = (await getFileContent(this.id, fileName)).data;
+        const fileContent = (await getFileContent(this.id, fileName)).data
+          .fileContent;
         return fileContent;
       }
     },

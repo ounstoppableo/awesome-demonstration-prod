@@ -5,7 +5,7 @@ import { selectComponentInfo } from '@/store/component-info/component-info-slice
 import { selectTheme } from '@/store/theme/theme-slice';
 
 export default function useStoreInfo(props: any) {
-  const { iframeRef } = props;
+  const { iframeRef, getServerAddr } = props;
   const componentInfo = useAppSelector(selectComponentInfo);
   const [frameworkReady, setFrameworkReady] = useState(false);
   const theme = useAppSelector(selectTheme);
@@ -30,7 +30,7 @@ export default function useStoreInfo(props: any) {
       };
       iframeRef.current?.contentWindow.postMessage(
         messageData,
-        location.protocol + '//' + location.hostname + ':11451',
+        getServerAddr(componentInfo.currentFramework),
       );
       iframeRef.current?.contentWindow.postMessage(
         {
@@ -41,7 +41,7 @@ export default function useStoreInfo(props: any) {
             },
           },
         },
-        location.protocol + '//' + location.hostname + ':11451',
+        getServerAddr(componentInfo.currentFramework),
       );
     }
   }, [
@@ -60,7 +60,7 @@ export default function useStoreInfo(props: any) {
           },
         },
       },
-      location.protocol + '//' + location.hostname + ':11451',
+      getServerAddr(componentInfo.currentFramework),
     );
   }, [theme]);
 

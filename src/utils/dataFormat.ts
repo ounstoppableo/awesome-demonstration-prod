@@ -11,34 +11,37 @@ import GlobalTag from './globalTag';
 
 export const formatDataToViewerAdaptor = (
   data: ComponentInfoFromBackend,
+  currentFramework: string,
 ): ComponentInfoForViewerType => {
-  console.log(data);
+  console.log(
+    data[`${currentFramework}EntryFileName` as keyof ComponentInfoFromBackend],
+  );
   return {
     id: data.id,
     entryFile: data[
-      `${data.framework[0]}EntryFileName` as keyof ComponentInfoFromBackend
+      `${currentFramework}EntryFileName` as keyof ComponentInfoFromBackend
     ] as any,
     relevantPackages: [
       data[
-        `${data.framework[0]}EntryFileName` as keyof ComponentInfoFromBackend
+        `${currentFramework}EntryFileName` as keyof ComponentInfoFromBackend
       ] as any,
       ...(data[
-        `${data.framework[0]}RelevantFiles` as keyof ComponentInfoFromBackend
+        `${currentFramework}RelevantFiles` as keyof ComponentInfoFromBackend
       ] as any),
     ],
     externalFiles: data[
-      `${data.framework[0]}ExternalFiles` as keyof ComponentInfoFromBackend
+      `${currentFramework}ExternalFiles` as keyof ComponentInfoFromBackend
     ] as any,
     currentFile: data[
-      `${data.framework[0]}EntryFileName` as keyof ComponentInfoFromBackend
+      `${currentFramework}EntryFileName` as keyof ComponentInfoFromBackend
     ] as any,
     fileContentsMap: {},
     framework: data.framework,
-    currentFramework: data.framework[0],
+    currentFramework: currentFramework,
   };
 };
 
-export const formatDataToForm = (data: ComponentInfoFromBackend) => {
+export const formatDataToFormAdaptor = (data: ComponentInfoFromBackend) => {
   return {
     componentName: data.name,
     framework: data.framework,
@@ -83,7 +86,7 @@ export const formatDataToForm = (data: ComponentInfoFromBackend) => {
   } as Pick<ComponentInfoFormType, 'componentName' | 'framework' | 'files'>;
 };
 
-export const formatDataForBackend = (
+export const formatDataForBackendAdaptor = (
   formContent: ComponentInfoFormType,
 ): ComponentInfoFromBackend => {
   try {

@@ -48,12 +48,13 @@ import {
   getComponentList,
   packageParse,
 } from '../lib/data';
-import { Component, Pencil, Plus } from 'lucide-react';
+import { Component, Minus, Pencil, Plus } from 'lucide-react';
 import {
   ComponentInfoFormType,
   formSchema,
 } from '@/utils/addComponentFormDataFormat';
-import { formatDataToForm } from '@/utils/dataFormat';
+import { formatDataToFormAdaptor } from '@/utils/dataFormat';
+import { Button } from '@/components/buttons/button-three';
 
 export default function useAddComponentForm(props?: any) {
   const onBeforeUpload = (files: File[]) => {
@@ -98,7 +99,6 @@ export default function useAddComponentForm(props?: any) {
   const handleSubmitBtnClick = () => {
     switch (activeStep) {
       case 1:
-        handleGetComponentInfo();
         handleStepChange(2);
         break;
       case 2:
@@ -114,7 +114,7 @@ export default function useAddComponentForm(props?: any) {
     getComponentInfo({ id: form.getValues('editComponentId') as string }).then(
       (res) => {
         if (res.code === 200) {
-          const componentInfoForForm = formatDataToForm(res.data);
+          const componentInfoForForm = formatDataToFormAdaptor(res.data);
           Object.keys(componentInfoForForm).forEach((key) => {
             form.setValue(
               key as any,
@@ -148,6 +148,7 @@ export default function useAddComponentForm(props?: any) {
           if (activeStep !== 2) {
             form.clearErrors();
           }
+          handleGetComponentInfo();
           return setActiveStep(2);
         }
       },
@@ -486,12 +487,47 @@ export default function useAddComponentForm(props?: any) {
                           </div>
                         </div>
                         {form.watch(`files.${framework}.relevantFiles` as any)
-                          .length ? (
+                          .length !== 0 || framework === 'html' ? (
                           <div>
-                            <div className="font-bold py-2">
+                            <div className="font-bold py-2 flex justify-between items-center">
                               Relevant File Fields
+                              {framework === 'html' ? (
+                                <Button
+                                  className="rounded-full w-8 h-8"
+                                  variant="outline"
+                                  size="icon"
+                                  aria-label="Add new item"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    const originalValue = form.getValues(
+                                      'files.html.relevantFiles',
+                                    );
+                                    const fileInfo = {
+                                      fileName: '',
+                                      filePath: '',
+                                      external: false,
+                                    };
+                                    console.log(originalValue);
+                                    form.setValue(
+                                      'files.html.relevantFiles',
+                                      originalValue
+                                        ? [...originalValue, fileInfo]
+                                        : [fileInfo],
+                                    );
+                                  }}
+                                >
+                                  <Plus
+                                    size={16}
+                                    strokeWidth={2}
+                                    aria-hidden="true"
+                                  />
+                                </Button>
+                              ) : (
+                                <></>
+                              )}
                             </div>
-                            <div className="flex flex-col gap-4 w-full overflow-y-auto pb-2 max-h-44 noScrollBar">
+                            <div className="flex flex-col gap-4 w-full overflow-y-auto pb-2 max-h-44 noScrollBar pl-[2px]">
                               {(
                                 form.getValues(
                                   `files.${framework}.relevantFiles` as any,
@@ -500,7 +536,7 @@ export default function useAddComponentForm(props?: any) {
                                 return (
                                   <div
                                     className="flex gap-4"
-                                    key={relevantFile.fileName}
+                                    key={relevantFile.fileName + index}
                                   >
                                     <div className="flex-[0.3]">
                                       <FormField
@@ -515,7 +551,7 @@ export default function useAddComponentForm(props?: any) {
                                               <Input
                                                 placeholder="Input fileName"
                                                 {...field}
-                                                disabled
+                                                disabled={framework !== 'html'}
                                               />
                                             </FormControl>
                                             <FormMessage />
@@ -523,7 +559,7 @@ export default function useAddComponentForm(props?: any) {
                                         )}
                                       />
                                     </div>
-                                    <div className="flex-[0.6]">
+                                    <div className="flex-[0.5]">
                                       {form.watch(
                                         `files.${framework}.relevantFiles[${index}].external` as any,
                                       ) ? (
@@ -721,6 +757,39 @@ export default function useAddComponentForm(props?: any) {
                                         )}
                                       />
                                     </div>
+
+                                    {framework === 'html' ? (
+                                      <div className="flex-[0.1] flex flex-col gap-2.5 items-end">
+                                        <div>minus</div>
+                                        <Button
+                                          className="rounded-full w-8 h-8"
+                                          variant="outline"
+                                          size="icon"
+                                          aria-label="Add new item"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                            const originalValue =
+                                              form.getValues(
+                                                'files.html.relevantFiles',
+                                              );
+                                            originalValue.splice(index, 1);
+                                            form.setValue(
+                                              'files.html.relevantFiles',
+                                              originalValue,
+                                            );
+                                          }}
+                                        >
+                                          <Minus
+                                            size={16}
+                                            strokeWidth={2}
+                                            aria-hidden="true"
+                                          />
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      <></>
+                                    )}
                                   </div>
                                 );
                               })}

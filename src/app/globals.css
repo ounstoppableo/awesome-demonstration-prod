@@ -107,6 +107,7 @@ body {
 }
 
 .noScrollBar ::-webkit-scrollbar {
+  display: none;
   width: 0px; /* 控制滚动条的宽度 */
   height: 0px; /* 控制横向滚动条的高度 */
 }

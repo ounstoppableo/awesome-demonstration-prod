@@ -28,9 +28,22 @@ export const componentInfoSlice = createSlice({
     setComponentInfo(state, action: PayloadAction<Partial<ComponentInfo>>) {
       state.value = merge(cloneDeep(state.value), action.payload);
     },
+    clearComponentInfo(state, action) {
+      state.value = {
+        id: '',
+        entryFile: '',
+        relevantPackages: [],
+        externalFiles: [],
+        currentFile: '',
+        fileContentsMap: {},
+        framework: [],
+        currentFramework: '',
+      };
+    },
   },
 });
-export const { setComponentInfo } = componentInfoSlice.actions;
+export const { setComponentInfo, clearComponentInfo } =
+  componentInfoSlice.actions;
 
 export const selectComponentInfo = (state: RootState) =>
   state.componentInfo.value;

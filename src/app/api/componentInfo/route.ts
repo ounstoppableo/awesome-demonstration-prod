@@ -8,7 +8,7 @@ import {
   ComponentInfoFormType,
   formSchema,
 } from '@/utils/addComponentFormDataFormat';
-import { formatDataForBackend } from '@/utils/dataFormat';
+import { formatDataForBackendAdaptor } from '@/utils/dataFormat';
 import GlobalTag from '@/utils/globalTag';
 
 export async function GET(req: NextRequest) {
@@ -62,10 +62,11 @@ export async function POST(req: NextRequest) {
     async (req, handleCompleted, handleError) => {
       try {
         const formContent: z.infer<typeof formSchema> = await req.json();
-        const storeSchema = formatDataForBackend(formContent);
+        const storeSchema = formatDataForBackendAdaptor(formContent);
         const files = extractFile(formContent);
         const connection = await pool.getConnection();
         await connection.beginTransaction();
+        let shouldUpdateFiles = null;
         if (formContent.addOrEdit === 'edit') {
           const currentFileNames = files.map((file) => file.fileName);
           const [originalFiles] = await connection.query(
@@ -76,6 +77,11 @@ export async function POST(req: NextRequest) {
             (originalFile: any) =>
               !currentFileNames.includes(originalFile.fileName),
           );
+          shouldUpdateFiles = (originalFiles as any[])
+            ?.filter((originalFile: any) =>
+              currentFileNames.includes(originalFile.fileName),
+            )
+            .map((file) => file.fileName);
           await Promise.all(
             deleteFiles.map(
               (file) =>
@@ -118,10 +124,11 @@ export async function POST(req: NextRequest) {
           res.map(
             (item: any) =>
               new Promise((resolve) => {
+                const shouldUpdate = shouldUpdateFiles?.includes(item.fileName);
                 connection
                   .query(
-                    'insert into `fileMap` (`fileName`, `fileContent`,`scope`) VALUES (?,?,?)',
-                    [item.fileName, item.fileContent, storeSchema.id],
+                    `${shouldUpdate ? 'update' : 'insert into'}  ${shouldUpdate ? 'fileMap set fileContent=? where fileName=? and scope=?' : 'fileMap (fileContent,fileName ,scope) VALUES (?,?,?)'}`,
+                    [item.fileContent, item.fileName, storeSchema.id],
                   )
                   .then(() => {
                     resolve(1);
@@ -145,7 +152,12 @@ export async function POST(req: NextRequest) {
         }
 
         await connection
-          .query('INSERT INTO `componentInfo` set ?;', storeSchema)
+          .query(
+            `${formContent.addOrEdit === 'add' ? 'inset into' : 'update'} componentInfo set ? ${formContent.addOrEdit === 'edit' ? '' : 'where id=?'};`,
+            formContent.addOrEdit === 'add'
+              ? storeSchema
+              : [storeSchema, storeSchema.id],
+          )
           .then(() => {
             connection.commit().then(() => {
               connection.release();

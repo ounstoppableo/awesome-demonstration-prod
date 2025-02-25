@@ -50,7 +50,9 @@ export default function Editor() {
         if (res.code === 200) {
           dispatch(
             setComponentInfo({
-              fileContentsMap: { [componentInfo.currentFile]: res.data },
+              fileContentsMap: {
+                [componentInfo.currentFile]: res.data.fileContent,
+              },
             }),
           );
         }
@@ -67,10 +69,7 @@ export default function Editor() {
   };
 
   return componentInfo.id ? (
-    <Tabs
-      defaultValue={componentInfo.currentFile}
-      className="flex flex-col h-full"
-    >
+    <Tabs value={componentInfo.currentFile} className="flex flex-col h-full">
       <TabsList className="relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px before:bg-border justify-start pl-0.5 pt-0.5">
         {componentInfo.relevantPackages.map((item: string, index) => {
           return (
@@ -92,7 +91,7 @@ export default function Editor() {
             value={item}
             className="p-0.5 flex-1 m-0"
           >
-            {componentInfo.fileContentsMap[item] ? (
+            {!!componentInfo.fileContentsMap[item] ? (
               <MonacoEditor
                 defaultValue={componentInfo.fileContentsMap[item]}
                 className="h-full"
