@@ -15,7 +15,7 @@ const checkPackageNotFromOuter = async (fileName: string) => {
   const viewInfoStoreState = useViewInfoStoreStore();
   const relaventImports = viewInfoStoreState.getRelevantPackages;
   if (!relaventImports.includes(fileName))
-    throw new Error('不要在编辑器中引入外部包！你可以通过fetch来获取。');
+    throw new Error('不要在编辑器中引入外部包！');
 };
 
 export const checkIsLegalPackage = async (fileName: string) => {

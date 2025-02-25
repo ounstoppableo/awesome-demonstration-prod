@@ -16,11 +16,15 @@ export default function Viewer(props: {
   const getServerAddr = (framework: 'vue' | 'html' | 'react') => {
     return framework === 'vue'
       ? location.protocol + '//' + location.hostname + ':11451'
-      : location.protocol +
+      : framework === 'html'
+        ? location.protocol +
           '//' +
           location.hostname +
           ':7777/' +
-          'htmlViewerServer.html';
+          'htmlViewerServer.html'
+        : framework === 'react'
+          ? location.protocol + '//' + location.hostname + ':7777/' + 'viewer'
+          : '';
   };
 
   if (!!componentInfoForParent) {
@@ -53,6 +57,14 @@ export default function Viewer(props: {
             location.hostname +
             ':7777/' +
             'htmlViewerServer.html'
+          }
+          className="w-full h-full"
+        ></iframe>
+      ) : framework === 'react' ? (
+        <iframe
+          ref={iframeRef}
+          src={
+            location.protocol + '//' + location.hostname + ':7777/' + 'viewer'
           }
           className="w-full h-full"
         ></iframe>

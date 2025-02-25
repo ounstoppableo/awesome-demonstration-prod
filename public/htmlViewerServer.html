@@ -93,6 +93,7 @@
         if (e.data.type === 'setStyle') {
           Object.keys(e.data.style).map((selector) => {
             Object.keys(e.data.style[selector]).forEach((attr) => {
+              if (!document.querySelector(selector)) return;
               document.querySelector(selector).style[attr] =
                 e.data.style[selector][attr];
             });
