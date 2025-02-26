@@ -1,6 +1,7 @@
 <script setup lang="ts">
+// @ts-ignore
 import { inject, onMounted, ref } from 'vue';
-import { parseToComponent } from './utils/parseToComponent';
+import ParseStringToComponent from './utils/parseStringToComponent/parseStringToComponent';
 import { useViewInfoStoreStore } from './store/viewInfoStore';
 const componentName = ref('');
 const app: any = inject('app');
@@ -12,17 +13,14 @@ onMounted(() => {
   window.addEventListener('message', async (e) => {
     if (e.data.type === 'updateViewer') {
       viewInfoStoreState.setViewInfo(e.data.viewInfo);
-      try {
-        await parseToComponent(
-          viewInfoStoreState.getRootContent,
-          'viewerRoot',
-          app,
-        );
-        randomKey.value = Math.random();
-        componentName.value = 'viewerRoot';
-      } catch (err) {
-        console.log(111);
-      }
+      const parseStringToComponent = new ParseStringToComponent(null);
+      await parseStringToComponent.parseToComponent(
+        viewInfoStoreState.getRootContent,
+        'viewerRoot',
+        app,
+      );
+      randomKey.value = Math.random();
+      componentName.value = 'viewerRoot';
     }
     if (e.data.type === 'setStyle') {
       Object.keys(e.data.style).map((selector) => {

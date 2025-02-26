@@ -30,6 +30,7 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import { useAppSelector } from '@/store/hooks';
+import ParseStringToComponent from '@/utils/parseStringForComponent/parseStringToComponent';
 
 export default function EditorContainer() {
   const router = useRouter();

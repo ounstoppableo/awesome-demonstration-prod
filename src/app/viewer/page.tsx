@@ -7,9 +7,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/store/hooks';
 import { isEqual } from 'lodash';
-import parseToComponent from '@/utils/parseStringForComponent/parseToComponent';
-
-(window as any).React = React;
+import ParseStringToComponent from '@/utils/parseStringToComponent/parseStringToComponent';
 
 function useDeepCompareEffect(
   callback: (...params: any) => any,
@@ -53,12 +51,12 @@ export default function Viewer() {
   }, []);
   useDeepCompareEffect(async () => {
     if (componentInfo.id) {
-      const components = await parseToComponent(
+      const parseStringToComponent = new ParseStringToComponent(componentInfo);
+      const components = await parseStringToComponent.parseToComponent(
         componentInfo.fileContentsMap[componentInfo.entryFile],
         'root',
-        componentInfo,
       );
-      setRoot(components);
+      setRoot(components as any);
     }
   }, [componentInfo]);
 
