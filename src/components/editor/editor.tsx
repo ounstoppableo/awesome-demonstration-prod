@@ -26,7 +26,7 @@ export default function Editor() {
     handleEditorDidMount,
     handleModelContentChange,
     editorContent,
-    monacoInstance,
+    monacoEditorInstance,
   } = useCustomMonaco();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export default function Editor() {
     const currentFileContent =
       componentInfo.fileContentsMap[componentInfo.currentFile];
     if (currentFileContent) {
-      monacoInstance?.setValue(currentFileContent);
+      monacoEditorInstance?.setValue(currentFileContent);
     } else {
       getFileContent({
         id: componentInfo.id,
@@ -62,7 +62,7 @@ export default function Editor() {
         }
       });
     }
-  }, [monacoInstance, componentInfo.currentFile]);
+  }, [monacoEditorInstance, componentInfo.currentFile]);
 
   const handleTabsChange = (e: any) => {
     dispatch(
