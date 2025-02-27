@@ -16,8 +16,8 @@ import {
   SelectValue,
 } from '@/components/selector/selector';
 import { Button } from '@/components/buttons/button-two/index';
-import { House, Boxes } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { House, Boxes, Trash2 } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BubbleText from '@/components/bubble-text';
 import { getComponentInfo, getFileContent } from '../lib/data';
@@ -30,7 +30,6 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import { useAppSelector } from '@/store/hooks';
-import ParseStringToComponent from '@/utils/parseStringForComponent/parseStringToComponent';
 
 export default function EditorContainer() {
   const router = useRouter();
@@ -69,8 +68,19 @@ export default function EditorContainer() {
       }
     });
   };
+
+  const handleOnMessage = (e: any) => {
+    if (e.data.type === 'handleCompileError') {
+      console.log(e.data);
+    }
+  };
+
   useEffect(() => {
     handleGetComponentInfo();
+    window.addEventListener('message', handleOnMessage);
+    return () => {
+      window.removeEventListener('message', handleOnMessage);
+    };
   }, []);
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">

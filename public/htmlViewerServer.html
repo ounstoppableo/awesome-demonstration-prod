@@ -18,9 +18,16 @@
       const rootDom = document.getElementById('root');
       window.parent.postMessage(
         { type: 'frameworkReady', data: '我准备好了~' },
-        '*',
+        location.protocol + '//' + location.hostname + ':7777',
       );
       window.addEventListener('message', async (e) => {
+        if (
+          e.origin !==
+          location.protocol + '//' + location.hostname + ':7777'
+        ) {
+          console.warn('拒绝来自不安全域的消息:', e.origin);
+          return;
+        }
         if (e.data.type === 'updateViewer') {
           rootDom.innerHTML =
             e.data.viewInfo.fileContentsMap[e.data.viewInfo.entryFile];

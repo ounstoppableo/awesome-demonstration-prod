@@ -446,7 +446,16 @@ export default function useAddComponentForm(props?: any) {
                                             const importFiles = res.data.map(
                                               (resItem: any) => ({
                                                 fileName: resItem,
-                                                filePath: '',
+                                                filePath:
+                                                  form
+                                                    .getValues(
+                                                      `files.${framework}.relevantFiles` as any,
+                                                    )
+                                                    .find(
+                                                      (file: any) =>
+                                                        file.fileName ===
+                                                        resItem,
+                                                    )?.filePath || '',
                                                 external: false,
                                               }),
                                             );
@@ -625,7 +634,17 @@ export default function useAddComponentForm(props?: any) {
                                                         packageRes.data.map(
                                                           (resItem: any) => ({
                                                             fileName: resItem,
-                                                            filePath: '',
+                                                            filePath:
+                                                              form
+                                                                .getValues(
+                                                                  `files.${framework}.relevantFiles` as any,
+                                                                )
+                                                                .find(
+                                                                  (file: any) =>
+                                                                    file.fileName ===
+                                                                    resItem,
+                                                                )?.filePath ||
+                                                              '',
                                                             external: false,
                                                           }),
                                                         );
@@ -722,7 +741,7 @@ export default function useAddComponentForm(props?: any) {
                                                         ? '.css,.js'
                                                         : framework === 'vue'
                                                           ? '.vue,.ts,.js'
-                                                          : '.tsx,.jsx,.ts,.js'
+                                                          : '.tsx,.jsx,.ts,.js,.scss,.sass,.less,.css'
                                                     }
                                                   ></FileUpload>
                                                 </FormControl>

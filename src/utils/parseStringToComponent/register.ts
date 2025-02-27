@@ -1,15 +1,26 @@
-import { getFileContent } from '@/app/lib/data';
+import { getFileContent, parseCssToObject } from '@/app/lib/data';
 import ParseStringToComponent, {
-  commonParseTools,
+  CommonParseTools,
 } from './parseStringToComponent';
 //@ts-ignore
 import * as Babel from '@babel/standalone';
 import React from 'react';
 import { ComponentInfoForViewerType } from '../addComponentFormDataFormat';
+import { compileString } from 'sass';
+import less from 'less';
 
 export function Register(target: typeof ParseStringToComponent) {
   class RegisteredParseStringComponent extends target {
-    static _legalExtension = ['.ts', '.tsx', 'jsx', 'js'];
+    static _legalExtension = [
+      '.ts',
+      '.tsx',
+      'jsx',
+      'js',
+      'scss',
+      'sass',
+      'less',
+      'css',
+    ];
     static _parseLanguage = 'react';
     static handleInstallDependence(): void {
       if (typeof window !== 'undefined') {
@@ -46,29 +57,28 @@ export function Register(target: typeof ParseStringToComponent) {
     }
     async handleStringToComponent(componentString: string, name: string) {
       componentString = Babel.transform(
-        commonParseTools.clearExportKeyWords(
-          commonParseTools.tsxTransJsx(componentString),
+        CommonParseTools.clearExportKeyWords(
+          CommonParseTools.tsxTransJsx(componentString),
         ),
         {
           presets: ['react'],
         },
       ).code;
 
-      const components = commonParseTools
-        .getFunctionAndReturn(componentString)
+      const components = CommonParseTools.getFunctionAndReturn(componentString)
         .filter((item: any) => item.returnValue === '<component>')
         .map((item: any) => item.functionName);
 
       componentString += `
-              if(!window._components['${name}']) window._components['${name}'] = {};
-                    ${components
-                      .map((component: any) => {
-                        return `
-                      window._components['${name}']['${component}'] = ${component};
-                      `;
-                      })
-                      .join(';')}
-                `;
+if(!window._components['${name}']) window._components['${name}'] = {};
+      ${components
+        .map((component: any) => {
+          return `
+        window._components['${name}']['${component}'] = ${component};
+        `;
+        })
+        .join(';')}
+  `;
       eval(componentString);
 
       const result: any = {};
@@ -77,7 +87,47 @@ export function Register(target: typeof ParseStringToComponent) {
         result[component] = (window as any)._components[name][component];
       });
 
+
+
       return result;
+    }
+    async handleDisposeCss(importStatement: string): Promise<string> {
+      const fileName =
+        CommonParseTools.getImportStatementFileName(importStatement);
+      let fileContent = await this.handleGetFileContent(fileName);
+      if (fileName.endsWith('.scss') || fileName.endsWith('.sass')) {
+        fileContent = (await compileString(fileContent)).css;
+      }
+      if (fileName.endsWith('less')) {
+        fileContent = (await less.render(fileContent)).css;
+      }
+      if (!fileName.includes('.module.')) {
+        document.getElementById('reactGlobalCss' + fileName)?.remove();
+        const styleDom = document.createElement('style');
+        styleDom.id = 'reactGlobalCss' + fileName;
+        styleDom.innerHTML = fileContent;
+        document.head.append(styleDom);
+      } else {
+        try {
+          const res = await parseCssToObject({
+            fileContent,
+          });
+          if (res.code !== 200) return '';
+          document.getElementById('reactModuleCss' + fileName)?.remove();
+          const styleDom = document.createElement('style');
+          styleDom.id = 'reactModuleCss' + fileName;
+          styleDom.innerHTML = res.data.css;
+          document.head.append(styleDom);
+          const imports =
+            CommonParseTools.getImportVariableFromContent(importStatement);
+          const variable = imports[0].local;
+
+          return `
+            const ${variable} = ${JSON.stringify(res.data.map)}
+          `;
+        } catch (err) {}
+      }
+      return '';
     }
   }
 

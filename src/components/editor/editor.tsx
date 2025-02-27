@@ -6,7 +6,7 @@ import {
   TabsTrigger,
 } from '@/components/tabs/tabs';
 import { Editor as MonacoEditor } from '@monaco-editor/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getFileContent } from '@/app/lib/data';
 import { useDispatch } from 'react-redux';
 import {
@@ -19,6 +19,7 @@ import useCustomMonaco from './hooks/useCustomMonaco';
 export default function Editor() {
   const componentInfo = useAppSelector(selectComponentInfo);
   const dispatch = useDispatch();
+  const antiShake = useRef<any>(null);
 
   const {
     handleEditorWillMount,
@@ -29,11 +30,14 @@ export default function Editor() {
   } = useCustomMonaco();
 
   useEffect(() => {
-    dispatch(
-      setComponentInfo({
-        fileContentsMap: { [componentInfo.currentFile]: editorContent },
-      }),
-    );
+    if (antiShake.current) clearTimeout(antiShake.current);
+    antiShake.current = setTimeout(() => {
+      dispatch(
+        setComponentInfo({
+          fileContentsMap: { [componentInfo.currentFile]: editorContent },
+        }),
+      );
+    }, 500);
   }, [editorContent]);
 
   useEffect(() => {

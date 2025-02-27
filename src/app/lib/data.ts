@@ -1,4 +1,5 @@
 import request from '@/utils/fetch';
+import { method } from 'lodash';
 type ComponentInfoParams = {
   id: string;
 };
@@ -34,4 +35,14 @@ export const addComponentInfo = async (params: AddComponentInfo) => {
 type GetComponentList = {};
 export const getComponentList = async (params?: GetComponentList) => {
   return await request(`/api/componentList`);
+};
+
+type ParseCssToObject = {
+  fileContent: string;
+};
+export const parseCssToObject = async (params: ParseCssToObject) => {
+  return await request(`/api/fileParse/cssParseToObject`, {
+    method: 'POST',
+    body: params,
+  });
 };

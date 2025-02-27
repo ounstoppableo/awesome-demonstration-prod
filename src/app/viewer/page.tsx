@@ -25,12 +25,17 @@ export default function Viewer() {
   const [root, setRoot] = useState(null);
   const dispatch = useDispatch();
   const componentInfo = useAppSelector(selectComponentInfo);
+  const [randomKey, setRandomKey] = useState(Math.random());
   useEffect(() => {
     window.parent.postMessage(
       { type: 'frameworkReady', data: '我准备好了~' },
-      '*',
+      location.origin,
     );
     const handleMsgCb = async (e: any) => {
+      if (e.origin !== location.protocol + '//' + location.hostname + ':7777') {
+        console.warn('拒绝来自不安全域的消息:', e.origin);
+        return;
+      }
       if (e.data.type === 'updateViewer') {
         dispatch(setComponentInfo(e.data.viewInfo));
       }
@@ -51,20 +56,48 @@ export default function Viewer() {
   }, []);
   useDeepCompareEffect(async () => {
     if (componentInfo.id) {
-      const parseStringToComponent = new ParseStringToComponent(componentInfo);
-      const components = await parseStringToComponent.parseToComponent(
-        componentInfo.fileContentsMap[componentInfo.entryFile],
-        'root',
-      );
-      setRoot(components as any);
+      try {
+        const parseStringToComponent = new ParseStringToComponent(
+          componentInfo,
+        );
+        const components = await parseStringToComponent.parseToComponent(
+          componentInfo.fileContentsMap[componentInfo.entryFile],
+          'root',
+        );
+        setRoot(components as any);
+      } catch (err) {
+        window.parent.postMessage(
+          { type: 'handleCompileError', data: err },
+          location.origin,
+        );
+      }
     }
   }, [componentInfo]);
 
-  return (
-    <>
-      <div className="flex justify-center items-center w-[100vw] h-[100vh]">
-        {root ? (root as any)[Object.keys(root)[0]]() : ''}
-      </div>
-    </>
-  );
+  useEffect(() => {
+    setRandomKey(Math.random());
+  }, [root]);
+
+  const safeResult = () => {
+    try {
+      return (
+        <div className="flex justify-center items-center w-[100vw] h-[100vh]">
+          {root ? (
+            <div key={randomKey}>
+              {(root as any)[Object.keys(root)[Object.keys(root).length - 1]]()}
+            </div>
+          ) : (
+            ''
+          )}
+        </div>
+      );
+    } catch (err) {
+      window.parent.postMessage(
+        { type: 'handleCompileError', data: err },
+        location.origin,
+      );
+    }
+  };
+
+  return <>{safeResult()}</>;
 }

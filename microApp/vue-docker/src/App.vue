@@ -11,13 +11,16 @@ const viewInfoStoreState = useViewInfoStoreStore();
 
 onMounted(() => {
   window.addEventListener('message', async (e) => {
+    if (e.origin !== location.protocol + '//' + location.hostname + ':7777') {
+      console.warn('拒绝来自不安全域的消息:', e.origin);
+      return;
+    }
     if (e.data.type === 'updateViewer') {
       viewInfoStoreState.setViewInfo(e.data.viewInfo);
-      const parseStringToComponent = new ParseStringToComponent(null);
+      const parseStringToComponent = new ParseStringToComponent(app);
       await parseStringToComponent.parseToComponent(
         viewInfoStoreState.getRootContent,
         'viewerRoot',
-        app,
       );
       randomKey.value = Math.random();
       componentName.value = 'viewerRoot';
@@ -33,7 +36,7 @@ onMounted(() => {
   });
   window.parent.postMessage(
     { type: 'frameworkReady', data: '我准备好了~' },
-    '*',
+    location.protocol + '//' + location.hostname + ':7777',
   );
 });
 </script>

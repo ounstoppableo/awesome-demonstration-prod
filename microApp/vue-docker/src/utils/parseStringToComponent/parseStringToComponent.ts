@@ -42,7 +42,7 @@ export class LegalStringCheck {
   }
 }
 
-export class commonParseTools {
+export class CommonParseTools {
   static clearExportKeyWords = (codeContent: string) => {
     // export { a, b, c as d };
     codeContent.match(/export\s+\{([^}]+)\};/g)?.forEach((item) => {
@@ -458,12 +458,12 @@ export default class ParseStringToComponent {
 
   async parseImportContent(importStateMent: string) {
     const imports =
-      commonParseTools.getImportVariableFromContent(importStateMent);
+      CommonParseTools.getImportVariableFromContent(importStateMent);
     for (let i = 0; i < imports.length; i++) {
       const importContent = await this.handleGetFileContent(imports[i].source);
       this.generateModuleValue(
         imports[i].source,
-        commonParseTools.tsxTransJsx(importContent),
+        CommonParseTools.tsxTransJsx(importContent),
       );
     }
 
@@ -479,10 +479,10 @@ export default class ParseStringToComponent {
   async generateModuleValue(fileName: string, moduleContent: string) {
     (window as any).modulesMap[fileName] = {};
     const declarations =
-      commonParseTools.getDeclarationFromContent(moduleContent);
+      CommonParseTools.getDeclarationFromContent(moduleContent);
     const exports =
-      commonParseTools.getExportVariableFromContent(moduleContent);
-    moduleContent = commonParseTools.clearExportKeyWords(moduleContent);
+      CommonParseTools.getExportVariableFromContent(moduleContent);
+    moduleContent = CommonParseTools.clearExportKeyWords(moduleContent);
     const outerExports = exports.filter((item) => item.source);
     for (let i = 0; i < outerExports.length; i++) {
       const outerExportContent = await this.handleGetFileContent(
@@ -490,7 +490,7 @@ export default class ParseStringToComponent {
       );
       this.generateModuleValue(
         outerExports[i].source,
-        commonParseTools.tsxTransJsx(outerExportContent),
+        CommonParseTools.tsxTransJsx(outerExportContent),
       );
     }
     const functionString = `
@@ -526,7 +526,6 @@ export default class ParseStringToComponent {
   async handleStringToComponent(
     componentString: string,
     name: string,
-    rootApp?: any,
   ): Promise<any> {
     throw new Error('handleStringToComponent应该被注册!');
   }
@@ -540,7 +539,6 @@ export default class ParseStringToComponent {
   async handleDisposeImportVueComponent(
     fileName: string,
     name: string,
-    rootApp?: any,
   ) {
     if (ParseStringToComponent._parseLanguage === 'vue')
       throw new Error('handleDisposeImportVueComponent应该注册!');
@@ -551,9 +549,11 @@ export default class ParseStringToComponent {
     return importContent;
   }
 
-  async handleDisposeCss(importStatement: string) {}
+  async handleDisposeCss(importStatement: string): Promise<string> {
+    return '';
+  }
 
-  async parseToComponent(componentString: string, name: string, rootApp?: any) {
+  async parseToComponent(componentString: string, name: string) {
     const importRegex = /import\s+[^'"]*['"][^'"]+['"];?/g;
     const allImports = componentString.match(importRegex) || [];
 
@@ -568,7 +568,7 @@ export default class ParseStringToComponent {
 
     // 检查合法性
     for (let i = 0; i < filterImports.length; i++) {
-      const fileName = commonParseTools.getImportStatementFileName(
+      const fileName = CommonParseTools.getImportStatementFileName(
         filterImports[i],
       );
       await this._legalStringCheck!.checkIsLegalPackage(fileName);
@@ -613,12 +613,12 @@ export default class ParseStringToComponent {
         (ast.body[0] as any).source.value?.endsWith('.scss') ||
         (ast.body[0] as any).source.value?.endsWith('.sass')
       ) {
-        this.handleDisposeCss(filterImports[i]);
+        preDefinitionContext += await this.handleDisposeCss(filterImports[i]);
       }
     }
 
     componentString = preDefinitionContext + componentString;
 
-    return await this.handleStringToComponent(componentString, name, rootApp);
+    return await this.handleStringToComponent(componentString, name);
   }
 }

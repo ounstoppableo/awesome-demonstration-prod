@@ -1,5 +1,5 @@
 import ParseStringToComponent, {
-  commonParseTools,
+  CommonParseTools,
 } from './parseStringToComponent';
 //@ts-ignore
 import { useViewInfoStoreStore } from '@/store/viewInfoStore';
@@ -12,30 +12,23 @@ export function Register(target: typeof ParseStringToComponent, _: any) {
     static _legalExtension = ['.ts', 'js', 'vue'];
     static _parseLanguage = 'vue';
     _store: any = null;
-    constructor() {
+    _app: any = null;
+    constructor(rootApp: any) {
       target._legalExtension = RegisteredParseStringComponent._legalExtension;
       target._parseLanguage = RegisteredParseStringComponent._parseLanguage;
       const viewInfoStoreStore = useViewInfoStoreStore();
       super(viewInfoStoreStore.$state);
       this._store = viewInfoStoreStore;
+      this._app = rootApp;
     }
     async handleGetFileContent(fileName: string): Promise<any> {
       return this._store.getFileContent(fileName);
     }
-    async handleDisposeImportVueComponent(
-      fileName: string,
-      name: string,
-      rootApp: any,
-    ) {
+    async handleDisposeImportVueComponent(fileName: string, name: string) {
       const sfcString = await this._store.getFileContent(fileName);
-      this.parseToComponent(sfcString, name, rootApp);
+      this.parseToComponent(sfcString, name);
     }
-    async handleStringToComponent(
-      componentString: string,
-      name: string,
-      rootApp: any,
-    ) {
-      const app: any = rootApp ? rootApp : Vue.inject('app');
+    async handleStringToComponent(componentString: string, name: string) {
       const options = {
         moduleCache: { vue: Vue },
         async getFile(url?: any) {
@@ -53,7 +46,7 @@ export function Register(target: typeof ParseStringToComponent, _: any) {
         },
       };
       const component = await loadModule(`${name}.vue`, options);
-      rootApp.component(name, component);
+      this._app.component(name, component);
     }
   }
 
