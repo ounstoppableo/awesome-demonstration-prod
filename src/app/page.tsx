@@ -36,6 +36,7 @@ import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import useBackground from '@/hooks/useBackground';
 import Loading from '@/components/loading';
 import useAuth from '@/hooks/useAuth';
+import useAlert from '@/components/alert/useAlert';
 
 export default function MainPage() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -182,18 +183,21 @@ export default function MainPage() {
 
   useEffect(() => {
     const token = searchParams.get('token');
-    localStorage.setItem('token', token || '');
+    token && localStorage.setItem('token', token);
   }, []);
 
   const { getBackgroundEffect } = useBackground();
 
   const { auth } = useAuth();
 
+  const { alertVDom } = useAlert({});
+
   const { formStep, AddComponentForm, handleSubmitBtnClick } =
     useAddComponentForm();
 
   return (
     <div className="h-[100vh]">
+      {alertVDom}
       <div className="absolute overflow-hidden w-full h-full pt-24">
         <Carousel slides={slideData} />
       </div>

@@ -30,6 +30,7 @@ import {
 import { useSearchParams } from 'next/navigation';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import { useAppSelector } from '@/store/hooks';
+import useAlert from '@/components/alert/useAlert';
 
 export default function EditorContainer() {
   const router = useRouter();
@@ -75,6 +76,8 @@ export default function EditorContainer() {
     }
   };
 
+  const { alertVDom } = useAlert({});
+
   useEffect(() => {
     handleGetComponentInfo();
     window.addEventListener('message', handleOnMessage);
@@ -84,6 +87,7 @@ export default function EditorContainer() {
   }, []);
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">
+      {alertVDom}
       <div className="py-2 px-0.5 flex justify-between border items-center relative">
         <Button
           onClick={(e) => {

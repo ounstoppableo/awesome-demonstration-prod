@@ -1,10 +1,16 @@
 'use client';
+
+import { store } from '@/app/StoreProvider';
+import { setAlert, setAlertMsg } from '@/store/alert/alert-slice';
+
 class FetchInterceptor {
   baseURL: string;
   defaultOptions: any;
+  _store: any;
   constructor(baseURL = '', defaultOptions = {}) {
     this.baseURL = baseURL;
     this.defaultOptions = defaultOptions;
+    this._store = store;
   }
 
   async request(url: string, options: any = {}) {
@@ -38,6 +44,8 @@ class FetchInterceptor {
       const errorData = await response
         .json()
         .catch(() => ({ message: 'Request Error' }));
+      this._store?.dispatch(setAlert(true));
+      this._store?.dispatch(setAlertMsg(errorData.message));
       throw new Error(
         errorData.message || `HTTP error! Status: ${response.status}`,
       );
@@ -46,7 +54,10 @@ class FetchInterceptor {
     if (res.code !== 200) {
       if (res.code === 401) {
         localStorage.setItem('token', '');
+        window.history.replaceState({}, '', window.location.pathname);
       }
+      this._store?.dispatch(setAlert(true));
+      this._store?.dispatch(setAlertMsg(res.msg));
     }
 
     return Promise.resolve(res);
