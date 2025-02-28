@@ -48,6 +48,9 @@ export default function Viewer() {
           });
         });
       }
+      if (e.data.type === 'setNoScrollBar') {
+        document.documentElement.classList.add('noScrollBar');
+      }
     };
     window.addEventListener('message', handleMsgCb);
     return () => {

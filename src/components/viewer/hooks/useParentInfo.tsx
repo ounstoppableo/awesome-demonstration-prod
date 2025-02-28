@@ -43,6 +43,12 @@ export default function useParentInfo(props: any) {
         },
         getServerAddr(componentInfoForParent.currentFramework),
       );
+      iframeRef.current?.contentWindow.postMessage(
+        {
+          type: 'setNoScrollBar',
+        },
+        getServerAddr(componentInfoForParent.currentFramework),
+      );
     }
   }, [frameworkReady]);
 

@@ -99,12 +99,12 @@ const Slide = ({ slide, index, current, handleSlideClick }: SlideProps) => {
             style={{
               opacity: current === index ? 1 : 0.5,
             }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full p-1 object-cover opacity-100 transition-opacity duration-600 ease-in-out"
+            className="absolute inset-[2px] rounded-[5%] overflow-hidden object-cover opacity-100 transition-opacity duration-600 ease-in-out"
           >
             {slot}
           </div>
           {current === index && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full p-1 group-hover:bg-black/20 transition-all duration-1000" />
+            <div className="absolute inset-[2px] rounded-[5%] group-hover:bg-black/20 transition-all duration-1000" />
           )}
         </div>
 

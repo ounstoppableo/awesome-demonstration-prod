@@ -37,6 +37,7 @@ import useBackground from '@/hooks/useBackground';
 import Loading from '@/components/loading';
 import useAuth from '@/hooks/useAuth';
 import useAlert from '@/components/alert/useAlert';
+import usePersistTheme from '@/hooks/usePersistTheme';
 
 export default function MainPage() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -44,6 +45,7 @@ export default function MainPage() {
   const [slideData, setSlideData] = useState([]);
   const theme = useAppSelector(selectTheme);
   const searchParams = useSearchParams();
+  usePersistTheme();
 
   const links = [
     {
@@ -107,6 +109,7 @@ export default function MainPage() {
       handleClick: (e: any) => {
         const newTheme =
           document.documentElement.className === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
         dispatch(setTheme(newTheme));
       },
     },

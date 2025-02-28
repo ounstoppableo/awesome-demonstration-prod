@@ -40,6 +40,9 @@ onMounted(() => {
         });
       });
     }
+    if (e.data.type === 'setNoScrollBar') {
+      document.documentElement.classList.add('noScrollBar');
+    }
   });
   window.parent.postMessage(
     { type: 'frameworkReady', data: '我准备好了~' },

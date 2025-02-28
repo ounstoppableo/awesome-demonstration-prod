@@ -31,12 +31,13 @@ import { useSearchParams } from 'next/navigation';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import { useAppSelector } from '@/store/hooks';
 import useAlert from '@/components/alert/useAlert';
+import usePersistTheme from '@/hooks/usePersistTheme';
 
 export default function EditorContainer() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const componentInfo = useAppSelector(selectComponentInfo);
-
+  usePersistTheme();
   const dispatch = useDispatch();
   const handleValueChange = (value: string) => {
     handleGetComponentInfo(value);
