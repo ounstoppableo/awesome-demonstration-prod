@@ -448,15 +448,15 @@ export default function useAddComponentForm(props?: any) {
                                         res.data[0]?.filePath,
                                       );
                                       if (
-                                        res.data[0]?.fileName.endsWith('.ts') ||
-                                        res.data[0]?.fileName.endsWith('.js') ||
-                                        res.data[0]?.fileName.endsWith(
+                                        res.data[0]?.fileName?.endsWith('.ts') ||
+                                        res.data[0]?.fileName?.endsWith('.js') ||
+                                        res.data[0]?.fileName?.endsWith(
                                           '.tsx',
                                         ) ||
-                                        res.data[0]?.fileName.endsWith(
+                                        res.data[0]?.fileName?.endsWith(
                                           '.jsx',
                                         ) ||
-                                        res.data[0]?.fileName.endsWith(
+                                        res.data[0]?.fileName?.endsWith(
                                           '.vue',
                                         ) ||
                                         !res.data[0]
@@ -628,19 +628,19 @@ export default function useAddComponentForm(props?: any) {
                                                   res.data[0]?.filePath,
                                                 );
                                                 if (
-                                                  res.data[0]?.fileName.endsWith(
+                                                  res.data[0]?.fileName?.endsWith(
                                                     '.ts',
                                                   ) ||
-                                                  res.data[0]?.fileName.endsWith(
+                                                  res.data[0]?.fileName?.endsWith(
                                                     '.js',
                                                   ) ||
-                                                  res.data[0]?.fileName.endsWith(
+                                                  res.data[0]?.fileName?.endsWith(
                                                     '.tsx',
                                                   ) ||
-                                                  res.data[0]?.fileName.endsWith(
+                                                  res.data[0]?.fileName?.endsWith(
                                                     '.jsx',
                                                   ) ||
-                                                  res.data[0]?.fileName.endsWith(
+                                                  res.data[0]?.fileName?.endsWith(
                                                     '.vue',
                                                   ) ||
                                                   !res.data[0]

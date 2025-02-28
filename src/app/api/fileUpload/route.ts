@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { v4 as uuidv4 } from 'uuid';
+import useAuth from '../auth/hooks/useAuth';
 
 export const config = {
   api: {
@@ -14,6 +15,7 @@ export async function POST(req: NextRequest) {
   return await handleResponse(
     req,
     async (req, handleCompleted, handleError) => {
+      if (!(await useAuth())) return handleError(ResponseMsg.authError);
       const formData = await req.formData();
       const file = formData.get('file') as File | null;
 

@@ -10,6 +10,7 @@ import {
 } from '@/utils/addComponentFormDataFormat';
 import { formatDataForBackendAdaptor } from '@/utils/dataFormat';
 import GlobalTag from '@/utils/globalTag';
+import useAuth from '../auth/hooks/useAuth';
 
 export async function GET(req: NextRequest) {
   return await handleResponse(
@@ -60,6 +61,7 @@ export async function POST(req: NextRequest) {
   return await handleResponse(
     req,
     async (req, handleCompleted, handleError) => {
+      if (!(await useAuth())) return handleError(ResponseMsg.authError);
       try {
         const formContent: z.infer<typeof formSchema> = await req.json();
         const storeSchema = formatDataForBackendAdaptor(formContent);

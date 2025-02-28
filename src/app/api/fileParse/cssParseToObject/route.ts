@@ -2,6 +2,7 @@ import postcss from 'postcss';
 import postcssModules from 'postcss-modules';
 import handleResponse, { ResponseMsg } from '@/utils/handleResponse';
 import { NextRequest } from 'next/server';
+import useAuth from '../../auth/hooks/useAuth';
 
 async function parseCssModule(cssCode: string): Promise<any> {
   const classMap: Record<string, string> = {};
@@ -24,6 +25,7 @@ export async function POST(req: NextRequest) {
     async (req, handleCompleted, handleError) => {
       const body = await req.json();
       const fileContent = body.fileContent as string;
+      if (!(await useAuth())) return handleError(ResponseMsg.authError);
       try {
         const result = await parseCssModule(fileContent);
         handleCompleted({
