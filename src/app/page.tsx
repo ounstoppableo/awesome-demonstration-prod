@@ -9,7 +9,7 @@ import {
 } from '@tabler/icons-react';
 import { Carousel } from '@/components/carousel/carousel';
 import { FloatingDock } from '@/components/floating-dock/floating-dock';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import {
@@ -35,12 +35,15 @@ import Viewer from '@/components/viewer/viewer';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import useBackground from '@/hooks/useBackground';
 import Loading from '@/components/loading';
+import useAuth from '@/hooks/useAuth';
 
 export default function MainPage() {
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const [slideData, setSlideData] = useState([]);
   const theme = useAppSelector(selectTheme);
+  const searchParams = useSearchParams();
+
   const links = [
     {
       title: 'Home',
@@ -177,7 +180,14 @@ export default function MainPage() {
     });
   }, []);
 
+  useEffect(() => {
+    const token = searchParams.get('token');
+    localStorage.setItem('token', token || '');
+  }, []);
+
   const { getBackgroundEffect } = useBackground();
+
+  const { auth } = useAuth();
 
   const { formStep, AddComponentForm, handleSubmitBtnClick } =
     useAddComponentForm();
@@ -190,30 +200,34 @@ export default function MainPage() {
       <div className="absolute z-[200] flex items-center bottom-12 justify-center h-fit w-fit select-none left-[50%] translate-x-[-50%]">
         <FloatingDock mobileClassName="translate-y-20" items={links} />
       </div>
-      <Dialog>
-        <DialogTrigger>
-          <div className="absolute left-2 h-10 w-10 z-40 text-neutral-600 dark:text-neutral-200 bottom-12 rounded-[2.5rem] hover:w-48 bg-neutral-200 dark:bg-neutral-800 transition-all duration-300 overflow-hidden">
-            <div className="h-10 w-10 rounded-[9999px]  flex justify-center items-center">
-              <Plus />
-              <div className="absolute w-40 left-7">Add Component</div>
+      {auth ? (
+        <Dialog>
+          <DialogTrigger>
+            <div className="absolute left-2 h-10 w-10 z-40 text-neutral-600 dark:text-neutral-200 bottom-12 rounded-[2.5rem] hover:w-48 bg-neutral-200 dark:bg-neutral-800 transition-all duration-300 overflow-hidden">
+              <div className="h-10 w-10 rounded-[9999px]  flex justify-center items-center">
+                <Plus />
+                <div className="absolute w-40 left-7">Add Component</div>
+              </div>
             </div>
-          </div>
-        </DialogTrigger>
-        <DialogContent className="w-fit">
-          <DialogHeader>
-            <DialogTitle>Add Component</DialogTitle>
-            <DialogDescription>
-              Add your components here. Click save when you're done.
-            </DialogDescription>
-          </DialogHeader>
-          {AddComponentForm}
-          <DialogFooter>
-            <Button type="submit" onClick={handleSubmitBtnClick}>
-              {formStep === 1 || formStep === 2 ? 'Next' : 'Save'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </DialogTrigger>
+          <DialogContent className="w-fit">
+            <DialogHeader>
+              <DialogTitle>Add Component</DialogTitle>
+              <DialogDescription>
+                Add your components here. Click save when you're done.
+              </DialogDescription>
+            </DialogHeader>
+            {AddComponentForm}
+            <DialogFooter>
+              <Button type="submit" onClick={handleSubmitBtnClick}>
+                {formStep === 1 || formStep === 2 ? 'Next' : 'Save'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <></>
+      )}
       <Loading showLoading={loading}></Loading>
       {getBackgroundEffect()}
     </div>

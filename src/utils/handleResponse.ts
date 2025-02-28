@@ -31,12 +31,14 @@ type ResponseMsgType = {
   serverError: string;
   paramsError: string;
   fileError: string;
+  authError: string;
 };
 
 export const ResponseMsg: ResponseMsgType = {
   serverError: '服务器错误!',
   paramsError: '参数不完整或格式错误！',
   fileError: '文件不存在!',
+  authError: 'token失效!',
 };
 
 const getResponseMsgKeyByValue = (value: string): any => {
@@ -53,4 +55,5 @@ export enum ResponseCode {
   serverError = 500,
   paramsError = 405,
   fileError = 406,
+  authError = 401,
 }

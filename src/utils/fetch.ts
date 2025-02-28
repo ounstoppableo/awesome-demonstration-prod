@@ -19,7 +19,7 @@ class FetchInterceptor {
     if (!finalOptions.headers['Authorization']) {
       const token = localStorage.getItem('token');
       if (token) {
-        finalOptions.headers['Authorization'] = `Bearer ${token}`;
+        finalOptions.headers['Authorization'] = `${token}`;
       }
     }
     if (!(finalOptions.body instanceof FormData)) {
@@ -44,6 +44,9 @@ class FetchInterceptor {
     }
     const res = await response.json();
     if (res.code !== 200) {
+      if (res.code === 401) {
+        localStorage.setItem('token', '');
+      }
     }
 
     return Promise.resolve(res);

@@ -46,3 +46,10 @@ export const parseCssToObject = async (params: ParseCssToObject) => {
     body: params,
   });
 };
+
+type Auth = {};
+export const auth = async (params?: Auth) => {
+  return await request(`/api/auth`, {
+    method: 'GET',
+  });
+};
