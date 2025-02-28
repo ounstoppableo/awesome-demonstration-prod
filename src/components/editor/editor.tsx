@@ -15,11 +15,13 @@ import {
 } from '@/store/component-info/component-info-slice';
 import { useAppSelector } from '@/store/hooks';
 import useCustomMonaco from './hooks/useCustomMonaco';
+import Loading from '../loading';
 
 export default function Editor() {
   const componentInfo = useAppSelector(selectComponentInfo);
   const dispatch = useDispatch();
   const antiShake = useRef<any>(null);
+  const [showLoading, setShowLoading] = useState(true);
 
   const {
     handleEditorWillMount,
@@ -42,10 +44,12 @@ export default function Editor() {
 
   useEffect(() => {
     if (!componentInfo.currentFile) return;
+    setShowLoading(true);
     const currentFileContent =
       componentInfo.fileContentsMap[componentInfo.currentFile];
     if (currentFileContent) {
       monacoEditorInstance?.setValue(currentFileContent);
+      setShowLoading(false);
     } else {
       getFileContent({
         id: componentInfo.id,
@@ -59,6 +63,7 @@ export default function Editor() {
               },
             }),
           );
+          setShowLoading(false);
         }
       });
     }
@@ -93,7 +98,7 @@ export default function Editor() {
           <TabsContent
             key={item + index}
             value={item}
-            className="p-0.5 flex-1 m-0"
+            className="p-0.5 flex-1 m-0 relative"
           >
             {!!componentInfo.fileContentsMap[item] ? (
               <MonacoEditor
@@ -108,6 +113,7 @@ export default function Editor() {
             ) : (
               <></>
             )}
+            <Loading showLoading={showLoading} cubeSize={80}></Loading>
           </TabsContent>
         );
       })}

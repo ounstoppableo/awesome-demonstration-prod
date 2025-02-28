@@ -34,8 +34,10 @@ import { getComponentList, getFileContent } from './lib/data';
 import Viewer from '@/components/viewer/viewer';
 import { formatDataToViewerAdaptor } from '@/utils/dataFormat';
 import useBackground from '@/hooks/useBackground';
+import Loading from '@/components/loading';
 
 export default function MainPage() {
+  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
   const [slideData, setSlideData] = useState([]);
   const theme = useAppSelector(selectTheme);
@@ -171,6 +173,7 @@ export default function MainPage() {
         );
         setSlideData(slideData);
       }
+      setLoading(false);
     });
   }, []);
 
@@ -184,7 +187,7 @@ export default function MainPage() {
       <div className="absolute overflow-hidden w-full h-full pt-24">
         <Carousel slides={slideData} />
       </div>
-      <div className="absolute z-20 flex items-center bottom-12 justify-center h-fit w-fit select-none left-[50%] translate-x-[-50%]">
+      <div className="absolute z-[200] flex items-center bottom-12 justify-center h-fit w-fit select-none left-[50%] translate-x-[-50%]">
         <FloatingDock mobileClassName="translate-y-20" items={links} />
       </div>
       <Dialog>
@@ -211,7 +214,7 @@ export default function MainPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-
+      <Loading showLoading={loading}></Loading>
       {getBackgroundEffect()}
     </div>
   );

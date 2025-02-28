@@ -3,7 +3,8 @@ import { selectTheme } from '@/store/theme/theme-slice';
 import { useEffect, useState } from 'react';
 
 export default function useParentInfo(props: any) {
-  const { iframeRef, componentInfoForParent, getServerAddr } = props;
+  const { iframeRef, componentInfoForParent, getServerAddr, setShowLoading } =
+    props;
   const [frameworkReady, setFrameworkReady] = useState(false);
   const theme = useAppSelector(selectTheme);
 
@@ -22,6 +23,7 @@ export default function useParentInfo(props: any) {
 
   useEffect(() => {
     if (frameworkReady) {
+      setShowLoading(true);
       const messageData = {
         type: 'updateViewer',
         viewInfo: componentInfoForParent,

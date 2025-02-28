@@ -65,6 +65,10 @@ export default function Viewer() {
           'root',
         );
         setRoot(components as any);
+        window.parent.postMessage(
+          { type: 'componentLoadCompleted', data: '组件加载完成~' },
+          location.origin,
+        );
       } catch (err) {
         window.parent.postMessage(
           { type: 'handleCompileError', data: err },

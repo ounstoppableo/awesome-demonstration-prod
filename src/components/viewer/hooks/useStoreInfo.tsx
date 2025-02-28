@@ -5,7 +5,7 @@ import { selectComponentInfo } from '@/store/component-info/component-info-slice
 import { selectTheme } from '@/store/theme/theme-slice';
 
 export default function useStoreInfo(props: any) {
-  const { iframeRef, getServerAddr } = props;
+  const { iframeRef, getServerAddr, setShowLoading } = props;
   const componentInfo = useAppSelector(selectComponentInfo);
   const [frameworkReady, setFrameworkReady] = useState(false);
   const theme = useAppSelector(selectTheme);
@@ -24,6 +24,7 @@ export default function useStoreInfo(props: any) {
 
   useEffect(() => {
     if (frameworkReady) {
+      setShowLoading(true);
       const messageData = {
         type: 'updateViewer',
         viewInfo: componentInfo,
@@ -46,7 +47,6 @@ export default function useStoreInfo(props: any) {
     }
   }, [
     frameworkReady,
-    componentInfo.fileContentsMap,
     componentInfo.fileContentsMap[componentInfo.currentFile],
   ]);
 

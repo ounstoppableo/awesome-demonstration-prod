@@ -96,6 +96,10 @@
               document.body.append(styleDom);
             }
           }
+          window.parent.postMessage(
+            { type: 'componentLoadCompleted', data: '组件加载完成~' },
+            location.protocol + '//' + location.hostname + ':7777',
+          );
         }
         if (e.data.type === 'setStyle') {
           Object.keys(e.data.style).map((selector) => {

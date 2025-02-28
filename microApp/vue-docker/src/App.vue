@@ -1,8 +1,9 @@
 <script setup lang="ts">
 // @ts-ignore
-import { inject, onMounted, ref } from 'vue';
+import { inject, onMounted, ref, nextTick } from 'vue';
 import ParseStringToComponent from './utils/parseStringToComponent/parseStringToComponent';
 import { useViewInfoStoreStore } from './store/viewInfoStore';
+
 const componentName = ref('');
 const app: any = inject('app');
 const randomKey = ref(Math.random());
@@ -24,6 +25,12 @@ onMounted(() => {
       );
       randomKey.value = Math.random();
       componentName.value = 'viewerRoot';
+      nextTick(() => {
+        window.parent.postMessage(
+          { type: 'componentLoadCompleted', data: '组件加载完成~' },
+          location.protocol + '//' + location.hostname + ':7777',
+        );
+      });
     }
     if (e.data.type === 'setStyle') {
       Object.keys(e.data.style).map((selector) => {
