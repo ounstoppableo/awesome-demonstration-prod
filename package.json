@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "concurrently \"node server.js\"  \"lerna run dev\" --paralle",
     "build": "next build",
-    "start": "next start",
+    "start": "next start --port 7777",
     "lint": "next lint"
   },
   "workspaces": [
