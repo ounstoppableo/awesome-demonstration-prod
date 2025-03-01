@@ -18,7 +18,7 @@ import {
   setBackgroundEffect,
 } from '@/store/background-effects/background-effects-slice';
 import { selectTheme, setTheme } from '@/store/theme/theme-slice';
-import { Sun, Moon, Plus } from 'lucide-react';
+import { Sun, Moon, Plus, Palette } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -71,20 +71,24 @@ export default function MainPage() {
       href: '#',
     },
     {
-      title: 'Aceternity UI',
+      title: 'Blog',
       icon: (
         <img
-          src="https://assets.aceternity.com/logo-dark.png"
-          className="h-[20px] w-[20px]"
+          src="https://www.unstoppable840.cn/assets/avatar.jpeg"
+          className="h-[100%] w-[100%] rounded-[100%]"
           alt="Aceternity Logo"
         />
       ),
       href: '#',
+      handleClick: (e: any) => {
+        e.preventDefault();
+        window.open('https://www.unstoppable840.cn', '_blank');
+      },
     },
     {
       title: 'Backgrounds',
       icon: (
-        <IconExchange className="h-full w-full text-neutral-500 dark:text-neutral-300" />
+        <Palette className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: '#',
       handleClick: (e: any) => {
@@ -119,6 +123,13 @@ export default function MainPage() {
         <IconBrandGithub className="h-full w-full text-neutral-500 dark:text-neutral-300" />
       ),
       href: '#',
+      handleClick: (e: any) => {
+        e.preventDefault();
+        window.open(
+          'https://github.com/ounstoppableo/awesome-demonstration',
+          '_blank',
+        );
+      },
     },
   ];
 
@@ -189,7 +200,7 @@ export default function MainPage() {
     token && localStorage.setItem('token', token);
   }, []);
 
-  const { getBackgroundEffect } = useBackground();
+  const { getBackgroundEffect } = useBackground({ container: 'background' });
 
   const { auth } = useAuth();
 

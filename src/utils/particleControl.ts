@@ -2,7 +2,12 @@ export function setParticle() {
   const theme =
     document.documentElement.className === 'dark' ? 'dark' : 'light';
   (window as any).particlesJS.load(
-    'particles-js',
+    'particles-js-for-background',
+    theme === 'dark' ? '/particles-dark.json' : '/particles-light.json',
+    function () {},
+  );
+  (window as any).particlesJS.load(
+    'particles-js-for-other',
     theme === 'dark' ? '/particles-dark.json' : '/particles-light.json',
     function () {},
   );

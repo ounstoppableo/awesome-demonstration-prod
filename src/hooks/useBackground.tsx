@@ -4,13 +4,19 @@ import { selectBackgroundEffects } from '@/store/background-effects/background-e
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectTheme } from '@/store/theme/theme-slice';
 
-export default function useBackground() {
+export default function useBackground(props: any) {
+  const { container = 'background' } = props;
   const currentBackgroundEffect = useAppSelector(selectBackgroundEffects);
   const theme = useAppSelector(selectTheme);
   const getBackgroundEffect = () => {
     switch (currentBackgroundEffect) {
       case 'particles':
-        return <div id="particles-js" className="absolute inset-0 -z-10"></div>;
+        return (
+          <div
+            id={'particles-js-for-' + container}
+            className="absolute inset-0 -z-10"
+          ></div>
+        );
       case 'grid':
         return (
           <FlickeringGrid
