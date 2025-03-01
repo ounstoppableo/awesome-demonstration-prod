@@ -5,6 +5,10 @@ import { TriangleAlert } from 'lucide-react';
 
 export default function ErrorAlert(props: any) {
   const { title, content } = props;
+  const [handleContentWrap, setHandleContentWrap] = useState([]);
+  useEffect(() => {
+    setHandleContentWrap(content?.split('\n'));
+  }, [content]);
   return (
     <div className="absolute shadow-lg p-8 flex flex-col gap-2 bg-background text-foreground left-1/2  top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl w-1/2 h-fit max-w-[50%] max-h-[60%]">
       <div className="flex flex-col">
@@ -13,8 +17,17 @@ export default function ErrorAlert(props: any) {
         </div>
         <div className="text-lg font-semibold text-center">{title}</div>
       </div>
-      <div className="w-full flex overflow-auto text-sm text-muted-foreground text-center break-all justify-center items-center">
-        {content}
+      <div
+        className={`w-full overflow-auto text-sm text-muted-foreground break-all ${handleContentWrap.length === 1 ? 'text-center' : ''}`}
+      >
+        {handleContentWrap.map((item) => {
+          return (
+            <div key={item}>
+              <div>{item}</div>
+              <br />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

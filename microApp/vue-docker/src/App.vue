@@ -17,20 +17,27 @@ onMounted(() => {
       return;
     }
     if (e.data.type === 'updateViewer') {
-      viewInfoStoreState.setViewInfo(e.data.viewInfo);
-      const parseStringToComponent = new ParseStringToComponent(app);
-      await parseStringToComponent.parseToComponent(
-        viewInfoStoreState.getRootContent,
-        'viewerRoot',
-      );
-      randomKey.value = Math.random();
-      componentName.value = 'viewerRoot';
-      nextTick(() => {
+      try {
+        viewInfoStoreState.setViewInfo(e.data.viewInfo);
+        const parseStringToComponent = new ParseStringToComponent(app);
+        await parseStringToComponent.parseToComponent(
+          viewInfoStoreState.getRootContent,
+          'viewerRoot',
+        );
+        randomKey.value = Math.random();
+        componentName.value = 'viewerRoot';
+        nextTick(() => {
+          window.parent.postMessage(
+            { type: 'componentLoadCompleted', data: '组件加载完成~' },
+            location.protocol + '//' + location.hostname + ':7777',
+          );
+        });
+      } catch (err: any) {
         window.parent.postMessage(
-          { type: 'componentLoadCompleted', data: '组件加载完成~' },
+          { type: 'handleCompileError', data: err.message },
           location.protocol + '//' + location.hostname + ':7777',
         );
-      });
+      }
     }
     if (e.data.type === 'setStyle') {
       Object.keys(e.data.style).map((selector) => {
@@ -53,18 +60,15 @@ onMounted(() => {
 
 <template>
   <Suspense>
-    <div
-      style="
+    <div style="
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-      "
-    >
+      ">
       <component :is="componentName" :key="randomKey"></component>
     </div>
   </Suspense>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

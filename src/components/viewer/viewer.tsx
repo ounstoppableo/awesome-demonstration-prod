@@ -16,6 +16,7 @@ export default function Viewer(props: {
 }) {
   const { componentInfoForParent } = props;
   const [showLoading, setShowLoading] = useState(true);
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const iframeRef = useRef<any>(null);
   const [errorInfo, setErrorInfo] = useState<{
     title: string;
@@ -70,9 +71,17 @@ export default function Viewer(props: {
   }, []);
 
   const handleOnMessage = (e: any) => {
-    if (e.data.type === 'handleCompileError') {
+    if (e.data.type === 'componentLoadCompleted') {
+      setShowErrorAlert(false);
       setErrorInfo({
-        title: 'Some Error Happened',
+        title: 'Some Errors Happened',
+        content: '',
+      });
+    }
+    if (e.data.type === 'handleCompileError') {
+      setShowErrorAlert(true);
+      setErrorInfo({
+        title: 'Some Errors Happened',
         content: e.data.data,
       });
     }
@@ -116,11 +125,18 @@ export default function Viewer(props: {
       ) : (
         <></>
       )}
-      <div className="absolute inset-0" id="errorDialogContainer">
-        <ErrorAlert
-          title={errorInfo.title}
-          content={errorInfo.content}
-        ></ErrorAlert>
+      <div
+        className={`absolute inset-0 ${showErrorAlert ? 'block' : 'hidden'}`}
+        id="errorDialogContainer"
+      >
+        {showErrorAlert ? (
+          <ErrorAlert
+            title={errorInfo.title}
+            content={errorInfo.content}
+          ></ErrorAlert>
+        ) : (
+          <></>
+        )}
       </div>
       <Loading showLoading={showLoading} cubeSize={80}></Loading>
     </div>

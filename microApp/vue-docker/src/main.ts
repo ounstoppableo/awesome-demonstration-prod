@@ -9,9 +9,9 @@ const app = createApp(App);
 app.provide('app', app);
 app.use(pinia);
 
-app.config.errorHandler = (err, instance, info) => {
+app.config.errorHandler = (err: any, instance, info) => {
   window.parent.postMessage(
-    { type: 'handleCompileError', data: err },
+    { type: 'handleCompileError', data: err.message },
     location.protocol + '//' + location.hostname + ':7777',
   );
 };
