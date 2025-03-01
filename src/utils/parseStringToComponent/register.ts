@@ -6,7 +6,9 @@ import ParseStringToComponent, {
 import * as Babel from '@babel/standalone';
 import React from 'react';
 import { ComponentInfoForViewerType } from '../addComponentFormDataFormat';
+//@ts-ignore
 import { compileString } from 'sass';
+//@ts-ignore
 import less from 'less';
 
 export function Register(target: typeof ParseStringToComponent) {
