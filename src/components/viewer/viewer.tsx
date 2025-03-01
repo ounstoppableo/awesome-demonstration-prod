@@ -6,7 +6,10 @@ import useParentInfo from './hooks/useParentInfo';
 import { ComponentInfoForViewerType } from '@/utils/addComponentFormDataFormat';
 import { selectTheme } from '@/store/theme/theme-slice';
 import { useAppSelector } from '@/store/hooks';
+import { Button } from '@/components/buttons/button-two/index';
 import Loading from '../loading';
+import ErrorAlert from '@/components/error-alert/index';
+import { TriangleAlert } from 'lucide-react';
 
 export default function Viewer(props: {
   componentInfoForParent?: ComponentInfoForViewerType;
@@ -14,6 +17,13 @@ export default function Viewer(props: {
   const { componentInfoForParent } = props;
   const [showLoading, setShowLoading] = useState(true);
   const iframeRef = useRef<any>(null);
+  const [errorInfo, setErrorInfo] = useState<{
+    title: string;
+    content: string;
+  }>({
+    title: 'Some Error Happened',
+    content: '',
+  });
   let framework: any;
   const getServerAddr = (framework: 'vue' | 'html' | 'react') => {
     return framework === 'vue'
@@ -59,6 +69,22 @@ export default function Viewer(props: {
     };
   }, []);
 
+  const handleOnMessage = (e: any) => {
+    if (e.data.type === 'handleCompileError') {
+      setErrorInfo({
+        title: 'Some Error Happened',
+        content: e.data.data,
+      });
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('message', handleOnMessage);
+    return () => {
+      window.removeEventListener('message', handleOnMessage);
+    };
+  }, []);
+
   return (
     <div className="h-full w-full relative">
       {framework === 'vue' ? (
@@ -90,6 +116,12 @@ export default function Viewer(props: {
       ) : (
         <></>
       )}
+      <div className="absolute inset-0" id="errorDialogContainer">
+        <ErrorAlert
+          title={errorInfo.title}
+          content={errorInfo.content}
+        ></ErrorAlert>
+      </div>
       <Loading showLoading={showLoading} cubeSize={80}></Loading>
     </div>
   );

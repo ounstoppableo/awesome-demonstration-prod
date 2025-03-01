@@ -72,9 +72,9 @@ export default function Viewer() {
           { type: 'componentLoadCompleted', data: '组件加载完成~' },
           location.origin,
         );
-      } catch (err) {
+      } catch (err: any) {
         window.parent.postMessage(
-          { type: 'handleCompileError', data: err },
+          { type: 'handleCompileError', data: err.message },
           location.origin,
         );
       }
@@ -98,9 +98,10 @@ export default function Viewer() {
           )}
         </div>
       );
-    } catch (err) {
+    } catch (err: any) {
+      console.log(err)
       window.parent.postMessage(
-        { type: 'handleCompileError', data: err },
+        { type: 'handleCompileError', data: err.message },
         location.origin,
       );
     }

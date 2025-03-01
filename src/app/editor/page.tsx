@@ -16,7 +16,7 @@ import {
   SelectValue,
 } from '@/components/selector/selector';
 import { Button } from '@/components/buttons/button-two/index';
-import { House, Boxes, Trash2 } from 'lucide-react';
+import { House, Boxes, Trash2, TriangleAlert } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BubbleText from '@/components/bubble-text';
@@ -71,21 +71,12 @@ export default function EditorContainer() {
     });
   };
 
-  const handleOnMessage = (e: any) => {
-    if (e.data.type === 'handleCompileError') {
-      console.log(e.data);
-    }
-  };
+  useEffect(() => {
+    handleGetComponentInfo();
+  }, []);
 
   const { alertVDom } = useAlert({});
 
-  useEffect(() => {
-    handleGetComponentInfo();
-    window.addEventListener('message', handleOnMessage);
-    return () => {
-      window.removeEventListener('message', handleOnMessage);
-    };
-  }, []);
   return (
     <div className="h-[100vh] w-[100vw] flex flex-col">
       {alertVDom}
