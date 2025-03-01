@@ -10,7 +10,7 @@ export default function ErrorAlert(props: any) {
     setHandleContentWrap(content?.split('\n'));
   }, [content]);
   return (
-    <div className="absolute shadow-lg p-8 flex flex-col gap-2 bg-background text-foreground left-1/2  top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl w-1/2 h-fit max-w-[50%] max-h-[60%]">
+    <div className="absolute dark:shadow-gray-800 shadow-lg p-8 flex flex-col gap-2 bg-background text-foreground left-1/2  top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl w-1/2 h-fit max-w-[50%] max-h-[60%]">
       <div className="flex flex-col">
         <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-full bg-red-50">
           <TriangleAlert className="size-5 text-red-600" />
