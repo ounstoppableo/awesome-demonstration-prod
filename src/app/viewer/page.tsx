@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from '@/store/hooks';
 import { isEqual } from 'lodash';
 import ParseStringToComponent from '@/utils/parseStringToComponent/parseStringToComponent';
+import NotFound from '@/components/not-found';
 
 function useDeepCompareEffect(
   callback: (...params: any) => any,
@@ -94,7 +95,7 @@ export default function Viewer() {
               {(root as any)[Object.keys(root)[Object.keys(root).length - 1]]()}
             </div>
           ) : (
-            ''
+            <NotFound></NotFound>
           )}
         </div>
       );

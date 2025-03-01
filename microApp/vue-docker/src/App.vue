@@ -59,16 +59,19 @@ onMounted(() => {
 </script>
 
 <template>
-  <Suspense>
-    <div style="
+  <div v-if="componentName" style="
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       ">
+    <Suspense>
       <component :is="componentName" :key="randomKey"></component>
-    </div>
-  </Suspense>
+    </Suspense>
+  </div>
+  <div v-if="!componentName">
+    <NotFound></NotFound>
+  </div>
 </template>
 
 <style scoped></style>
