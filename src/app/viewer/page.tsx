@@ -88,7 +88,7 @@ export default function Viewer() {
   const safeResult = () => {
     try {
       return (
-        <div className="flex justify-center items-center w-[100vw] h-[100vh]">
+        <div className="flex justify-center items-center w-[100vw] h-[100vh] bg-transparent">
           {root ? (
             <div key={randomKey}>
               {(root as any)[Object.keys(root)[Object.keys(root).length - 1]]()}
@@ -99,7 +99,7 @@ export default function Viewer() {
         </div>
       );
     } catch (err: any) {
-      console.log(err)
+      console.log(err);
       window.parent.postMessage(
         { type: 'handleCompileError', data: err.message },
         location.origin,

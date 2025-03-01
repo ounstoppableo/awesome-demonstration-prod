@@ -111,14 +111,15 @@ export default function Editor() {
                 theme="customTheme"
               />
             ) : (
-              <></>
+              <Loading showLoading={showLoading} cubeSize={80}></Loading>
             )}
-            <Loading showLoading={showLoading} cubeSize={80}></Loading>
           </TabsContent>
         );
       })}
     </Tabs>
   ) : (
-    <></>
+    <div className="relative h-full">
+      <Loading showLoading={showLoading} cubeSize={80}></Loading>
+    </div>
   );
 }
