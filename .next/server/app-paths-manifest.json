@@ -1,0 +1,14 @@
+{
+  "/api/auth/route": "app/api/auth/route.js",
+  "/api/componentInfo/route": "app/api/componentInfo/route.js",
+  "/api/componentList/route": "app/api/componentList/route.js",
+  "/api/fileContent/route": "app/api/fileContent/route.js",
+  "/api/fileParse/cssParseToObject/route": "app/api/fileParse/cssParseToObject/route.js",
+  "/api/packageParse/route": "app/api/packageParse/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/fileUpload/route": "app/api/fileUpload/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/editor/page": "app/editor/page.js",
+  "/page": "app/page.js",
+  "/viewer/page": "app/viewer/page.js"
+}
